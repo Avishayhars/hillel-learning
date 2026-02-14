@@ -580,6 +580,7 @@ body::after {
 </div>
 
 <div class="confetti-container" id="confettiContainer"></div>
+
 <script>
 // ============ STATE ============
 let currentTopic = '';
@@ -681,6 +682,7 @@ function drawSquare(side, showDims = true, showDiags = false) {
     svg += svgDimension(pts[0][0], pts[0][1], pts[1][0], pts[1][1], `${side} ס״מ`, -22);
     svg += svgDimension(pts[1][0], pts[1][1], pts[2][0], pts[2][1], `${side} ס״מ`, -22);
   }
+  // Right angles
   svg += svgRightAngle(pts[0][0], pts[0][1] + 12);
   svg += svgRightAngle(pts[1][0] - 12, pts[1][1] + 12);
   if (showDiags) {
@@ -710,6 +712,7 @@ function drawRectangle(w, h, showDims = true, showDiags = false) {
 }
 
 function drawTriangle(type, labels) {
+  // Types: equilateral, isosceles, scalene, right, obtuse, acute
   let pts, angleInfo = '';
   const ox = 160, oy = 30;
   switch (type) {
@@ -738,6 +741,7 @@ function drawTriangle(type, labels) {
   let svg = svgPolygon(pts);
   svg += angleInfo;
   if (labels) {
+    // Side labels
     for (let i = 0; i < 3; i++) {
       const j = (i + 1) % 3;
       const mx = (pts[i][0] + pts[j][0]) / 2;
@@ -761,6 +765,7 @@ function drawGenericPolygon(n, sides, name) {
     pts.push([cx + r * Math.cos(angle), cy + r * Math.sin(angle)]);
   }
   let svg = svgPolygon(pts);
+  // Side labels
   for (let i = 0; i < n; i++) {
     const j = (i + 1) % n;
     const mx = (pts[i][0] + pts[j][0]) / 2;
@@ -782,13 +787,17 @@ function drawPolygonWithDiags(n, name) {
     pts.push([cx + r * Math.cos(angle), cy + r * Math.sin(angle)]);
   }
   let svg = svgPolygon(pts);
+  // Draw all diagonals
   for (let i = 0; i < n; i++) {
     for (let j = i + 2; j < n; j++) {
-      if (i === 0 && j === n - 1) continue;
+      if (i === 0 && j === n - 1) continue; // skip sides
       svg += svgLine(pts[i][0], pts[i][1], pts[j][0], pts[j][1], C.diag, 2, '6,4');
     }
   }
+  // Vertex labels
   for (let i = 0; i < n; i++) {
+    const dx = pts[i][0] - cx, dy = pts[i][1] - cy;
+    const dl = Math.sqrt(dx * dx + dy * dy);
     svg += `<circle cx="${pts[i][0]}" cy="${pts[i][1]}" r="4" fill="${C.shape}"/>`;
   }
   svg += svgText(cx, cy + r + 30, name, 14, C.label);
@@ -833,7 +842,8 @@ function drawQuadrilateral(type) {
   svg += svgText((pts[0][0]+pts[1][0]+pts[2][0]+pts[3][0])/4, Math.max(pts[0][1],pts[1][1],pts[2][1],pts[3][1]) + 30, name, 15, C.label);
   return svgWrap(svg, 320, 210);
 }
- // ============ GENERATORS ============
+
+// ============ GENERATORS ============
 
 // --- DIAGONALS ---
 function genDiagonals() {
@@ -846,6 +856,7 @@ function genDiagonals() {
   const type = randInt(0, 3);
 
   if (type <= 1) {
+    // How many diagonals in shape?
     const s = shapes[randInt(0, 3)];
     const { options, correctIdx } = makeOptions(
       String(s.diags),
@@ -859,6 +870,7 @@ function genDiagonals() {
       visual: drawPolygonWithDiags(s.n, s.name)
     };
   } else if (type === 2) {
+    // True/false about diagonal properties
     const facts = [
       { q: 'במרובע יש בדיוק 2 אלכסונים', a: true, exp: 'מרובע = 4 קודקודים. כל קודקוד מתחבר ל-1 קודקוד לא שכן, וזה נותן 2 אלכסונים' },
       { q: 'במשולש יש אלכסון אחד', a: false, exp: 'במשולש כל שני קודקודים הם שכנים, לכן אין אלכסונים כלל!' },
@@ -879,6 +891,7 @@ function genDiagonals() {
       visual: null
     };
   } else {
+    // Identify which shape from diag count
     const s = shapes[randInt(1, 3)];
     const { options, correctIdx } = makeOptions(
       s.name,
@@ -945,6 +958,7 @@ function genQuadProps() {
   const type = randInt(0, 3);
 
   if (type === 0) {
+    // Which shape has this property?
     const uniqueProps = [
       { prop: 'כל הצלעות שוות וכל הזוויות ישרות', answer: 'ריבוע', wrong: ['מלבן', 'מעוין', 'מקבילית'] },
       { prop: 'צלעות נגדיות שוות וכל הזוויות ישרות, אבל לא כל הצלעות שוות', answer: 'מלבן', wrong: ['ריבוע', 'מעוין', 'טרפז'] },
@@ -962,10 +976,12 @@ function genQuadProps() {
       visual: null
     };
   } else if (type === 1) {
+    // True/false about a specific quad
     const keys = Object.keys(quads);
     const key = pickRandom(keys);
     const quad = quads[key];
     const trueProp = pickRandom(quad.props);
+    // Create a false prop
     const falseProps = [
       `ב${quad.name} כל הזוויות חדות`,
       `ב${quad.name} האלכסונים שווים תמיד`,
@@ -986,6 +1002,7 @@ function genQuadProps() {
       visual: drawQuadrilateral(key)
     };
   } else if (type === 2) {
+    // Identify shape from image
     const keys = ['square', 'rectangle', 'rhombus', 'parallelogram', 'trapezoid'];
     const key = pickRandom(keys);
     const quad = quads[key];
@@ -1002,6 +1019,7 @@ function genQuadProps() {
       visual: drawQuadrilateral(key)
     };
   } else {
+    // Which property does NOT belong?
     const keys = Object.keys(quads);
     const key = pickRandom(keys);
     const quad = quads[key];
@@ -1013,8 +1031,9 @@ function genQuadProps() {
       'האלכסונים שווים',
       'זוויות נגדיות שוות',
     ];
+    // Find a statement NOT in the quad's props
     const notProp = wrongStatements.find(s => !quad.props.some(p => p.includes(s.slice(0, 10))));
-    if (!notProp) return genQuadProps();
+    if (!notProp) return genQuadProps(); // retry
     const { options, correctIdx } = makeOptions(
       notProp,
       shuffle(quad.props).slice(0, 3)
@@ -1034,6 +1053,7 @@ function genTriangles() {
   const type = randInt(0, 4);
 
   if (type === 0) {
+    // Classify by sides
     const tris = [
       { name: 'שווה צלעות', sides: [5, 5, 5], type: 'equilateral', exp: 'כל 3 הצלעות שוות, לכן זה משולש שווה צלעות' },
       { name: 'שווה שוקיים', sides: [5, 5, 3], type: 'isosceles', exp: 'שתי צלעות שוות (השוקיים), לכן זה משולש שווה שוקיים' },
@@ -1052,6 +1072,7 @@ function genTriangles() {
       visual: drawTriangle(tri.type, { sides: tri.sides })
     };
   } else if (type === 1) {
+    // Classify by angles
     const tris = [
       { name: 'חד זווית', desc: 'כל הזוויות קטנות מ-90°', type: 'acute', angles: [70, 60, 50] },
       { name: 'ישר זווית', desc: 'יש זווית אחת של 90°', type: 'right', angles: [90, 45, 45] },
@@ -1070,6 +1091,7 @@ function genTriangles() {
       visual: drawTriangle(tri.type)
     };
   } else if (type === 2) {
+    // Sum of angles
     const a1 = randInt(30, 80);
     const a2 = randInt(30, 150 - a1 - 10);
     const a3 = 180 - a1 - a2;
@@ -1085,6 +1107,7 @@ function genTriangles() {
       visual: null
     };
   } else if (type === 3) {
+    // True/false about triangles
     const facts = [
       { q: 'סכום הזוויות במשולש הוא 180°', a: true, exp: 'נכון! זה כלל בסיסי בגיאומטריה' },
       { q: 'במשולש שווה צלעות כל זווית שווה ל-60°', a: true, exp: 'נכון! 180° ÷ 3 = 60°' },
@@ -1106,18 +1129,104 @@ function genTriangles() {
       visual: null
     };
   } else {
+    // What CAN'T be a triangle?
     const a1 = randInt(20, 60);
     const a2 = randInt(20, 60);
     const a3Good = 180 - a1 - a2;
     const a3Bad = 180 - a1 - a2 + randInt(5, 20);
     const good = `${a1}°, ${a2}°, ${a3Good}°`;
     const bad = `${a1}°, ${a2}°, ${a3Bad}°`;
-    const { options, correctIdx } = makeOptions( 
-      // --- AREA & PERIMETER OF RECT/SQUARE ---
+    const { options, correctIdx } = makeOptions(
+      bad,
+      [good, `60°, 60°, 60°`, `90°, 45°, 45°`]
+    );
+    return {
+      text: `איזו קבוצת זוויות לא יכולה להיות משולש?`,
+      hint: '💡 סכום הזוויות חייב להיות בדיוק 180°',
+      options, correctIdx,
+      explanation: `${bad}: הסכום = ${a1 + a2 + a3Bad}° ≠ 180°, לכן זה לא יכול להיות משולש`,
+      visual: null
+    };
+  }
+}
+
+// --- PERIMETER ---
+function genPerimeter() {
+  const type = randInt(0, 3);
+
+  if (type === 0) {
+    // Triangle perimeter
+    const s1 = randInt(3, 12), s2 = randInt(3, 12), s3 = randInt(Math.abs(s1-s2)+1, s1+s2-1);
+    const P = s1 + s2 + s3;
+    const tType = s1 === s2 && s2 === s3 ? 'equilateral' : (s1 === s2 || s2 === s3 || s1 === s3 ? 'isosceles' : 'scalene');
+    const { options, correctIdx } = makeOptions(
+      `${P} ס״מ`,
+      [`${P + s1} ס״מ`, `${P - s3} ס״מ`, `${s1 * s2} ס״מ`]
+    );
+    return {
+      text: `מהו היקף המשולש?`,
+      hint: `💡 היקף = סכום כל הצלעות`,
+      options, correctIdx,
+      explanation: `היקף = ${s1} + ${s2} + ${s3} = ${P} ס״מ`,
+      visual: drawTriangle(tType, { sides: [s1 + ' ס״מ', s2 + ' ס״מ', s3 + ' ס״מ'] })
+    };
+  } else if (type === 1) {
+    // Generic polygon perimeter (4-6 sides)
+    const n = randInt(4, 6);
+    const names = { 4: 'מרובע', 5: 'מחומש', 6: 'משושה' };
+    const sides = [];
+    for (let i = 0; i < n; i++) sides.push(randInt(2, 10));
+    const P = sides.reduce((a, b) => a + b, 0);
+    const { options, correctIdx } = makeOptions(
+      `${P} ס״מ`,
+      [`${P + sides[0]} ס״מ`, `${P - sides[n-1]} ס״מ`, `${Math.round(P * 1.5)} ס״מ`]
+    );
+    return {
+      text: `מהו היקף ה${names[n]}?`,
+      hint: `💡 חברו את כל ${n} הצלעות`,
+      options, correctIdx,
+      explanation: `היקף = ${sides.join(' + ')} = ${P} ס״מ`,
+      visual: drawGenericPolygon(n, sides.map(s => s + ' ס״מ'), names[n])
+    };
+  } else if (type === 2) {
+    // Square perimeter
+    const s = randInt(3, 15);
+    const P = s * 4;
+    const { options, correctIdx } = makeOptions(
+      `${P} ס״מ`,
+      [`${s * s} ס״מ`, `${s * 2} ס״מ`, `${s * 3} ס״מ`]
+    );
+    return {
+      text: `מהו היקף הריבוע?`,
+      hint: '💡 בריבוע כל הצלעות שוות! היקף = צלע × 4',
+      options, correctIdx,
+      explanation: `היקף ריבוע = 4 × צלע = 4 × ${s} = ${P} ס״מ`,
+      visual: drawSquare(s)
+    };
+  } else {
+    // Rectangle perimeter
+    const w = randInt(3, 15), h = randInt(3, 12);
+    const P = 2 * (w + h);
+    const { options, correctIdx } = makeOptions(
+      `${P} ס״מ`,
+      [`${w * h} ס״מ`, `${w + h} ס״מ`, `${P + w} ס״מ`]
+    );
+    return {
+      text: `מהו היקף המלבן?`,
+      hint: '💡 היקף מלבן = 2 × (אורך + רוחב)',
+      options, correctIdx,
+      explanation: `היקף = 2 × (${w} + ${h}) = 2 × ${w + h} = ${P} ס״מ`,
+      visual: drawRectangle(w, h)
+    };
+  }
+}
+
+// --- AREA & PERIMETER OF RECT/SQUARE ---
 function genRectArea() {
   const type = randInt(0, 5);
 
   if (type === 0) {
+    // Square area
     const s = randInt(2, 12);
     const A = s * s;
     const { options, correctIdx } = makeOptions(
@@ -1132,6 +1241,7 @@ function genRectArea() {
       visual: drawSquare(s)
     };
   } else if (type === 1) {
+    // Rectangle area
     const w = randInt(2, 12), h = randInt(2, 10);
     const A = w * h;
     const { options, correctIdx } = makeOptions(
@@ -1146,6 +1256,7 @@ function genRectArea() {
       visual: drawRectangle(w, h)
     };
   } else if (type === 2) {
+    // Find missing side from area
     const w = randInt(3, 12), h = randInt(2, 10);
     const A = w * h;
     const { options, correctIdx } = makeOptions(
@@ -1160,6 +1271,7 @@ function genRectArea() {
       visual: null
     };
   } else if (type === 3) {
+    // Square: area vs perimeter distinction
     const s = randInt(3, 10);
     const A = s * s;
     const P = s * 4;
@@ -1190,6 +1302,7 @@ function genRectArea() {
       };
     }
   } else if (type === 4) {
+    // Word problem
     const problems = [
       () => {
         const s = randInt(3, 8);
@@ -1235,6 +1348,7 @@ function genRectArea() {
       visual: null
     };
   } else {
+    // Find side from perimeter
     const isSquare = Math.random() < 0.5;
     if (isSquare) {
       const s = randInt(3, 15);
