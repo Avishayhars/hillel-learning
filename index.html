@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>לומדת גיאומטריה - כיתה ד׳</title>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #6C5CE7;
+  --primary-light: #A29BFE;
+  --secondary: #00B894;
+  --secondary-light: #55EFC4;
+  --accent: #FDCB6E;
+  --success: #2DC653;
+  --error: #E63946;
+  --bg: #F8F7FF;
+  --card: #FFFFFF;
+  --text: #2D2A32;
+  --text-light: #6B6777;
+  --shadow: 0 4px 20px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 40px rgba(0,0,0,0.12);
+  --radius: 20px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Rubik', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: -100px;
+  left: -100px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(108,92,231,0.08) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: 0;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  bottom: -150px;
+  right: -150px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(0,184,148,0.06) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: 0;
+}
+
+.app {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.header {
+  text-align: center;
+  padding: 30px 20px;
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 2.8rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+}
+
+.header p {
+  font-size: 1.1rem;
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+/* Progress */
+.progress-container {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow);
+  display: none;
+}
+.progress-container.active { display: block; }
+
+.progress-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.progress-bar {
+  height: 12px;
+  background: #EDE9FE;
+  border-radius: 6px;
+  overflow: hidden;
+  direction: ltr;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  border-radius: 6px;
+  transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  width: 0%;
+}
+
+.score-display { display: flex; gap: 16px; align-items: center; }
+.score-item { display: flex; align-items: center; gap: 4px; font-size: 0.9rem; }
+
+/* Topics */
+.topics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.topic-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border: 3px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.topic-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 80px;
+  height: 80px;
+  border-radius: 0 0 0 80px;
+  opacity: 0.1;
+  transition: all 0.3s;
+}
+
+.topic-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--primary-light);
+}
+
+.topic-icon { font-size: 2.2rem; margin-bottom: 12px; display: block; }
+
+.topic-title {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--primary);
+}
+
+.topic-desc { font-size: 0.85rem; color: var(--text-light); line-height: 1.5; }
+
+.topic-card[data-color="purple"]::before { background: var(--primary); }
+.topic-card[data-color="green"]::before { background: var(--secondary); }
+.topic-card[data-color="yellow"]::before { background: var(--accent); }
+.topic-card[data-color="red"]::before { background: var(--error); }
+.topic-card[data-color="blue"]::before { background: #0984E3; }
+.topic-card[data-color="teal"]::before { background: #0D9488; }
+.topic-card[data-color="pink"]::before { background: #EC4899; }
+
+.section-title {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--text-light);
+  margin: 24px 0 12px;
+  padding-right: 4px;
+}
+
+/* Question Card */
+.question-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 32px;
+  box-shadow: var(--shadow-lg);
+  margin-bottom: 20px;
+  display: none;
+  animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.question-card.active { display: block; }
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.question-topic-badge {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: white;
+}
+
+.question-text {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  line-height: 1.6;
+  margin-bottom: 8px;
+  color: var(--primary);
+}
+
+.question-hint {
+  font-size: 0.9rem;
+  color: var(--text-light);
+  margin-bottom: 24px;
+  font-style: italic;
+}
+
+/* SVG Visual */
+.visual-container {
+  display: flex;
+  justify-content: center;
+  margin: 16px 0 24px;
+}
+
+.visual-container svg {
+  max-width: 100%;
+  height: auto;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.08));
+}
+
+/* Options */
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.option-btn {
+  background: var(--bg);
+  border: 3px solid #E8E6E6;
+  border-radius: 16px;
+  padding: 16px;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.option-btn:hover {
+  border-color: var(--primary-light);
+  background: #F0EEFF;
+  transform: scale(1.02);
+}
+
+.option-btn.correct {
+  border-color: var(--success);
+  background: #ECFDF5;
+  color: var(--success);
+  animation: correctPulse 0.5s;
+}
+
+.option-btn.wrong {
+  border-color: var(--error);
+  background: #FEF2F2;
+  color: var(--error);
+  animation: shake 0.4s;
+}
+
+.option-btn:disabled { cursor: default; opacity: 0.7; }
+.option-btn:disabled:hover { transform: none; }
+
+@keyframes correctPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+
+/* Explanation */
+.explanation {
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 16px;
+  display: none;
+  line-height: 1.8;
+  font-size: 1rem;
+}
+
+.explanation.show { display: block; animation: slideUp 0.3s; }
+
+.explanation.correct-exp {
+  background: #ECFDF5;
+  border: 2px solid #A7F3D0;
+  color: #065F46;
+}
+
+.explanation.wrong-exp {
+  background: #FEF2F2;
+  border: 2px solid #FECACA;
+  color: #991B1B;
+}
+
+.explanation-title {
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+
+/* Buttons */
+.next-btn {
+  display: none;
+  width: 100%;
+  padding: 16px;
+  margin-top: 16px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: white;
+  border: none;
+  border-radius: 16px;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.next-btn.show { display: block; animation: slideUp 0.3s; }
+.next-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(108,92,231,0.3); }
+
+.back-btn {
+  display: none;
+  background: none;
+  border: 2px solid #E8E6E6;
+  border-radius: 12px;
+  padding: 8px 16px;
+  font-family: 'Rubik', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-light);
+  cursor: pointer;
+  margin-bottom: 16px;
+  transition: all 0.2s;
+}
+
+.back-btn:hover { border-color: var(--primary-light); color: var(--primary); }
+.back-btn.show { display: inline-flex; align-items: center; gap: 6px; }
+
+/* Results */
+.results-screen {
+  display: none;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.results-screen.active { display: block; animation: slideUp 0.5s; }
+.results-emoji { font-size: 4rem; margin-bottom: 16px; }
+
+.results-title {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 12px;
+}
+
+.results-score {
+  font-size: 3rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 8px;
+}
+
+.results-message {
+  font-size: 1.1rem;
+  color: var(--text-light);
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.results-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.stat-card {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+
+.stat-value {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.stat-label { font-size: 0.85rem; color: var(--text-light); margin-top: 4px; }
+
+.restart-btn {
+  display: inline-block;
+  padding: 16px 40px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: white;
+  border: none;
+  border-radius: 16px;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.restart-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(108,92,231,0.3); }
+
+/* Confetti */
+.confetti-container {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 100;
+}
+
+.confetti-piece {
+  position: absolute; width: 10px; height: 10px; top: -10px;
+  animation: confettiFall 3s linear forwards;
+}
+
+@keyframes confettiFall {
+  0% { top: -10px; opacity: 1; transform: rotate(0deg) translateX(0); }
+  100% { top: 110vh; opacity: 0; transform: rotate(720deg) translateX(100px); }
+}
+
+/* Math inline */
+.math-val {
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.unit { font-weight: 500; }
+
+@media (max-width: 600px) {
+  .header h1 { font-size: 2rem; }
+  .question-text { font-size: 1.2rem; }
+  .options-grid { grid-template-columns: 1fr; }
+  .results-stats { grid-template-columns: 1fr; }
+  .topics-grid { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="header">
+    <h1>📐 לומדת גיאומטריה</h1>
+    <p>כיתה ד׳ - צורות, שטח והיקף</p>
+  </div>
+
+  <button class="back-btn" id="backBtn" onclick="goToTopics()">→ חזרה לנושאים</button>
+
+  <div class="progress-container" id="progressContainer">
+    <div class="progress-top">
+      <span id="questionCounter">שאלה 1 מתוך 8</span>
+      <div class="score-display">
+        <span class="score-item">✅ <span id="correctCount">0</span></span>
+        <span class="score-item">❌ <span id="wrongCount">0</span></span>
+      </div>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
+
+  <!-- Topic Selection -->
+  <div id="topicSelection">
+    <div class="section-title">📘 צורות ותכונות</div>
+    <div class="topics-grid">
+      <div class="topic-card" data-color="purple" onclick="startTopic('diagonals')">
+        <span class="topic-icon">✖️</span>
+        <div class="topic-title">אלכסונים</div>
+        <div class="topic-desc">זיהוי וספירת אלכסונים במצולעים</div>
+      </div>
+      <div class="topic-card" data-color="blue" onclick="startTopic('quadProps')">
+        <span class="topic-icon">🔷</span>
+        <div class="topic-title">תכונות מרובעים</div>
+        <div class="topic-desc">ריבוע, מלבן, מעוין, מקבילית, טרפז</div>
+      </div>
+      <div class="topic-card" data-color="green" onclick="startTopic('triangles')">
+        <span class="topic-icon">🔺</span>
+        <div class="topic-title">מיון משולשים</div>
+        <div class="topic-desc">לפי זוויות ולפי צלעות</div>
+      </div>
+    </div>
+    <div class="section-title">📗 חישובים</div>
+    <div class="topics-grid">
+      <div class="topic-card" data-color="yellow" onclick="startTopic('perimeter')">
+        <span class="topic-icon">📏</span>
+        <div class="topic-title">היקף מצולע</div>
+        <div class="topic-desc">חישוב היקף על ידי חיבור צלעות</div>
+      </div>
+      <div class="topic-card" data-color="red" onclick="startTopic('rectArea')">
+        <span class="topic-icon">⬛</span>
+        <div class="topic-title">שטח והיקף מלבן וריבוע</div>
+        <div class="topic-desc">נוסחאות שטח והיקף</div>
+      </div>
+    </div>
+    <div class="section-title">🌟 סיכום</div>
+    <div class="topics-grid">
+      <div class="topic-card" data-color="teal" onclick="startTopic('all')" style="grid-column: 1 / -1;">
+        <span class="topic-icon">🏆</span>
+        <div class="topic-title">סימולציית מבחן - כל הנושאים!</div>
+        <div class="topic-desc">10 שאלות מעורבות מכל הסוגים</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Question -->
+  <div class="question-card" id="questionCard">
+    <div class="question-topic-badge" id="topicBadge"></div>
+    <div class="question-text" id="questionText"></div>
+    <div class="question-hint" id="questionHint"></div>
+    <div id="visualArea" class="visual-container"></div>
+    <div id="answerArea"></div>
+    <div class="explanation" id="explanation">
+      <div class="explanation-title" id="explanationTitle"></div>
+      <div id="explanationText"></div>
+    </div>
+    <button class="next-btn" id="nextBtn" onclick="nextQuestion()">שאלה הבאה ←</button>
+  </div>
+
+  <!-- Results -->
+  <div class="results-screen" id="resultsScreen">
+    <div class="results-emoji" id="resultsEmoji">🎉</div>
+    <div class="results-title" id="resultsTitle"></div>
+    <div class="results-score" id="resultsScore"></div>
+    <div class="results-message" id="resultsMessage"></div>
+    <div class="results-stats">
+      <div class="stat-card"><div class="stat-value" id="statCorrect">0</div><div class="stat-label">נכונות</div></div>
+      <div class="stat-card"><div class="stat-value" id="statWrong">0</div><div class="stat-label">טעויות</div></div>
+      <div class="stat-card"><div class="stat-value" id="statTotal">0</div><div class="stat-label">סה״כ</div></div>
+    </div>
+    <button class="restart-btn" onclick="goToTopics()">🏠 חזרה לנושאים</button>
+  </div>
+</div>
+
+<div class="confetti-container" id="confettiContainer"></div>
+<script>
+// ============ STATE ============
+let currentTopic = '';
+let questions = [];
+let currentQ = 0;
+let correctScore = 0;
+let wrongScore = 0;
+
+// ============ HELPERS ============
+function randInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function pickRandom(arr) { return arr[randInt(0, arr.length - 1)]; }
+
+function makeOptions(correctVal, wrongVals) {
+  const opts = [{ html: correctVal, key: 'correct' }];
+  const seen = new Set([correctVal]);
+  for (const w of wrongVals) {
+    if (!seen.has(w) && opts.length < 4) {
+      opts.push({ html: w, key: 'wrong' });
+      seen.add(w);
+    }
+  }
+  let attempts = 0;
+  while (opts.length < 4 && attempts < 100) {
+    attempts++;
+    const x = String(randInt(1, 50));
+    if (!seen.has(x)) {
+      opts.push({ html: x, key: 'wrong' });
+      seen.add(x);
+    }
+  }
+  const shuffled = shuffle(opts);
+  const correctIdx = shuffled.findIndex(o => o.key === 'correct');
+  return { options: shuffled.map(o => o.html), correctIdx };
+}
+
+// ============ SVG HELPERS ============
+function svgWrap(inner, w = 320, h = 220) {
+  return `<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg" style="font-family:Fredoka,sans-serif;">${inner}</svg>`;
+}
+
+const C = {
+  shape: '#6C5CE7',
+  shapeFill: 'rgba(108,92,231,0.08)',
+  diag: '#E63946',
+  side: '#00B894',
+  label: '#2D2A32',
+  dimLine: '#0984E3',
+  dimText: '#0984E3',
+  angleArc: '#FDCB6E',
+  right: '#E63946',
+};
+
+function svgLine(x1, y1, x2, y2, color = C.shape, width = 2.5, dash = '') {
+  return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${color}" stroke-width="${width}" stroke-linecap="round" ${dash ? `stroke-dasharray="${dash}"` : ''}/>`;
+}
+
+function svgText(x, y, text, size = 16, color = C.label, anchor = 'middle') {
+  return `<text x="${x}" y="${y}" font-size="${size}" fill="${color}" text-anchor="${anchor}" font-weight="700" font-family="Fredoka,sans-serif">${text}</text>`;
+}
+
+function svgPolygon(points, fill = C.shapeFill, stroke = C.shape, width = 2.5) {
+  const pts = points.map(p => p.join(',')).join(' ');
+  return `<polygon points="${pts}" fill="${fill}" stroke="${stroke}" stroke-width="${width}" stroke-linejoin="round"/>`;
+}
+
+function svgDimension(x1, y1, x2, y2, label, offset = 20) {
+  const mx = (x1 + x2) / 2;
+  const my = (y1 + y2) / 2;
+  const dx = x2 - x1, dy = y2 - y1;
+  const len = Math.sqrt(dx * dx + dy * dy);
+  const nx = -dy / len * offset, ny = dx / len * offset;
+  return svgLine(x1 + nx, y1 + ny, x2 + nx, y2 + ny, C.dimLine, 1.5) +
+    svgText(mx + nx, my + ny - 5, label, 14, C.dimText);
+}
+
+function svgRightAngle(cx, cy, size = 12) {
+  return `<rect x="${cx}" y="${cy - size}" width="${size}" height="${size}" fill="none" stroke="${C.right}" stroke-width="1.5"/>`;
+}
+
+// ============ SHAPE DRAWINGS ============
+
+function drawSquare(side, showDims = true, showDiags = false) {
+  const s = 120, ox = 100, oy = 40;
+  const pts = [[ox, oy], [ox + s, oy], [ox + s, oy + s], [ox, oy + s]];
+  let svg = svgPolygon(pts);
+  if (showDims) {
+    svg += svgDimension(pts[0][0], pts[0][1], pts[1][0], pts[1][1], `${side} ס״מ`, -22);
+    svg += svgDimension(pts[1][0], pts[1][1], pts[2][0], pts[2][1], `${side} ס״מ`, -22);
+  }
+  svg += svgRightAngle(pts[0][0], pts[0][1] + 12);
+  svg += svgRightAngle(pts[1][0] - 12, pts[1][1] + 12);
+  if (showDiags) {
+    svg += svgLine(pts[0][0], pts[0][1], pts[2][0], pts[2][1], C.diag, 2, '6,4');
+    svg += svgLine(pts[1][0], pts[1][1], pts[3][0], pts[3][1], C.diag, 2, '6,4');
+  }
+  svg += svgText(ox + s / 2, oy + s + 30, 'ריבוע', 15, C.label);
+  return svgWrap(svg, 320, 210);
+}
+
+function drawRectangle(w, h, showDims = true, showDiags = false) {
+  const sw = 160, sh = 100, ox = 80, oy = 40;
+  const pts = [[ox, oy], [ox + sw, oy], [ox + sw, oy + sh], [ox, oy + sh]];
+  let svg = svgPolygon(pts);
+  if (showDims) {
+    svg += svgDimension(pts[0][0], pts[0][1], pts[1][0], pts[1][1], `${w} ס״מ`, -22);
+    svg += svgDimension(pts[1][0], pts[1][1], pts[2][0], pts[2][1], `${h} ס״מ`, -22);
+  }
+  svg += svgRightAngle(pts[0][0], pts[0][1] + 12);
+  svg += svgRightAngle(pts[1][0] - 12, pts[1][1] + 12);
+  if (showDiags) {
+    svg += svgLine(pts[0][0], pts[0][1], pts[2][0], pts[2][1], C.diag, 2, '6,4');
+    svg += svgLine(pts[1][0], pts[1][1], pts[3][0], pts[3][1], C.diag, 2, '6,4');
+  }
+  svg += svgText(ox + sw / 2, oy + sh + 30, 'מלבן', 15, C.label);
+  return svgWrap(svg, 320, 210);
+}
+
+function drawTriangle(type, labels) {
+  let pts, angleInfo = '';
+  const ox = 160, oy = 30;
+  switch (type) {
+    case 'equilateral':
+      pts = [[ox, oy], [ox + 70, oy + 130], [ox - 70, oy + 130]];
+      break;
+    case 'isosceles':
+      pts = [[ox, oy], [ox + 80, oy + 130], [ox - 80, oy + 130]];
+      break;
+    case 'scalene':
+      pts = [[ox - 30, oy], [ox + 90, oy + 130], [ox - 80, oy + 130]];
+      break;
+    case 'right':
+      pts = [[ox - 70, oy + 10], [ox + 70, oy + 140], [ox - 70, oy + 140]];
+      angleInfo = svgRightAngle(pts[2][0], pts[2][1]);
+      break;
+    case 'obtuse':
+      pts = [[ox + 50, oy], [ox + 90, oy + 130], [ox - 90, oy + 130]];
+      break;
+    case 'acute':
+      pts = [[ox, oy], [ox + 65, oy + 120], [ox - 65, oy + 120]];
+      break;
+    default:
+      pts = [[ox, oy], [ox + 70, oy + 130], [ox - 70, oy + 130]];
+  }
+  let svg = svgPolygon(pts);
+  svg += angleInfo;
+  if (labels) {
+    for (let i = 0; i < 3; i++) {
+      const j = (i + 1) % 3;
+      const mx = (pts[i][0] + pts[j][0]) / 2;
+      const my = (pts[i][1] + pts[j][1]) / 2;
+      const dx = pts[j][0] - pts[i][0], dy = pts[j][1] - pts[i][1];
+      const len = Math.sqrt(dx * dx + dy * dy);
+      const nx = -dy / len * 16, ny = dx / len * 16;
+      if (labels.sides && labels.sides[i] != null) {
+        svg += svgText(mx + nx, my + ny, `${labels.sides[i]}`, 13, C.dimText);
+      }
+    }
+  }
+  return svgWrap(svg, 320, 200);
+}
+
+function drawGenericPolygon(n, sides, name) {
+  const cx = 160, cy = 100, r = 75;
+  const pts = [];
+  for (let i = 0; i < n; i++) {
+    const angle = -Math.PI / 2 + (2 * Math.PI * i) / n;
+    pts.push([cx + r * Math.cos(angle), cy + r * Math.sin(angle)]);
+  }
+  let svg = svgPolygon(pts);
+  for (let i = 0; i < n; i++) {
+    const j = (i + 1) % n;
+    const mx = (pts[i][0] + pts[j][0]) / 2;
+    const my = (pts[i][1] + pts[j][1]) / 2;
+    const dx = pts[j][0] - pts[i][0], dy = pts[j][1] - pts[i][1];
+    const len = Math.sqrt(dx * dx + dy * dy);
+    const nx = -dy / len * 18, ny = dx / len * 18;
+    svg += svgText(mx + nx, my + ny, `${sides[i]}`, 12, C.dimText);
+  }
+  if (name) svg += svgText(cx, cy + r + 30, name, 14, C.label);
+  return svgWrap(svg, 320, 230);
+}
+
+function drawPolygonWithDiags(n, name) {
+  const cx = 160, cy = 100, r = 75;
+  const pts = [];
+  for (let i = 0; i < n; i++) {
+    const angle = -Math.PI / 2 + (2 * Math.PI * i) / n;
+    pts.push([cx + r * Math.cos(angle), cy + r * Math.sin(angle)]);
+  }
+  let svg = svgPolygon(pts);
+  for (let i = 0; i < n; i++) {
+    for (let j = i + 2; j < n; j++) {
+      if (i === 0 && j === n - 1) continue;
+      svg += svgLine(pts[i][0], pts[i][1], pts[j][0], pts[j][1], C.diag, 2, '6,4');
+    }
+  }
+  for (let i = 0; i < n; i++) {
+    svg += `<circle cx="${pts[i][0]}" cy="${pts[i][1]}" r="4" fill="${C.shape}"/>`;
+  }
+  svg += svgText(cx, cy + r + 30, name, 14, C.label);
+  return svgWrap(svg, 320, 230);
+}
+
+function drawQuadrilateral(type) {
+  const ox = 60, oy = 40;
+  let pts, svg = '', name = '';
+  switch (type) {
+    case 'square':
+      pts = [[ox + 40, oy], [ox + 160, oy], [ox + 160, oy + 120], [ox + 40, oy + 120]];
+      name = 'ריבוע';
+      svg += svgRightAngle(pts[0][0], pts[0][1] + 12);
+      break;
+    case 'rectangle':
+      pts = [[ox + 20, oy], [ox + 200, oy], [ox + 200, oy + 110], [ox + 20, oy + 110]];
+      name = 'מלבן';
+      svg += svgRightAngle(pts[0][0], pts[0][1] + 12);
+      break;
+    case 'rhombus':
+      pts = [[ox + 110, oy], [ox + 200, oy + 70], [ox + 110, oy + 140], [ox + 20, oy + 70]];
+      name = 'מעוין';
+      break;
+    case 'parallelogram':
+      pts = [[ox + 60, oy], [ox + 210, oy], [ox + 160, oy + 120], [ox + 10, oy + 120]];
+      name = 'מקבילית';
+      break;
+    case 'trapezoid':
+      pts = [[ox + 60, oy], [ox + 180, oy], [ox + 210, oy + 120], [ox + 10, oy + 120]];
+      name = 'טרפז';
+      break;
+    case 'kite':
+      pts = [[ox + 110, oy], [ox + 190, oy + 70], [ox + 110, oy + 150], [ox + 30, oy + 70]];
+      name = 'עפיפון';
+      break;
+    default:
+      pts = [[ox + 40, oy], [ox + 160, oy], [ox + 160, oy + 120], [ox + 40, oy + 120]];
+      name = type;
+  }
+  svg = svgPolygon(pts) + svg;
+  svg += svgText((pts[0][0]+pts[1][0]+pts[2][0]+pts[3][0])/4, Math.max(pts[0][1],pts[1][1],pts[2][1],pts[3][1]) + 30, name, 15, C.label);
+  return svgWrap(svg, 320, 210);
+}
+ // ============ GENERATORS ============
+
+// --- DIAGONALS ---
+function genDiagonals() {
+  const shapes = [
+    { name: 'משולש', n: 3, diags: 0 },
+    { name: 'מרובע', n: 4, diags: 2 },
+    { name: 'מחומש', n: 5, diags: 5 },
+    { name: 'משושה', n: 6, diags: 9 },
+  ];
+  const type = randInt(0, 3);
+
+  if (type <= 1) {
+    const s = shapes[randInt(0, 3)];
+    const { options, correctIdx } = makeOptions(
+      String(s.diags),
+      [String(s.diags + 1), String(Math.max(0, s.diags - 1)), String(s.diags + 2)]
+    );
+    return {
+      text: `כמה אלכסונים יש ב${s.name}?`,
+      hint: `💡 אלכסון = קו שמחבר שני קודקודים שאינם שכנים`,
+      options, correctIdx,
+      explanation: `ב${s.name} (${s.n} צלעות) יש ${s.diags} אלכסונים. הנוסחה: n×(n-3)÷2`,
+      visual: drawPolygonWithDiags(s.n, s.name)
+    };
+  } else if (type === 2) {
+    const facts = [
+      { q: 'במרובע יש בדיוק 2 אלכסונים', a: true, exp: 'מרובע = 4 קודקודים. כל קודקוד מתחבר ל-1 קודקוד לא שכן, וזה נותן 2 אלכסונים' },
+      { q: 'במשולש יש אלכסון אחד', a: false, exp: 'במשולש כל שני קודקודים הם שכנים, לכן אין אלכסונים כלל!' },
+      { q: 'במחומש יש 5 אלכסונים', a: true, exp: 'מחומש: 5×(5-3)÷2 = 5×2÷2 = 5 אלכסונים' },
+      { q: 'אלכסון עובר בתוך הצורה', a: true, exp: 'אלכסון הוא קטע שמחבר שני קודקודים לא שכנים ועובר בתוך המצולע' },
+      { q: 'במשושה יש 8 אלכסונים', a: false, exp: 'במשושה יש 9 אלכסונים: 6×(6-3)÷2 = 6×3÷2 = 9' },
+    ];
+    const fact = pickRandom(facts);
+    const { options, correctIdx } = makeOptions(
+      fact.a ? 'נכון ✓' : 'לא נכון ✗',
+      [fact.a ? 'לא נכון ✗' : 'נכון ✓', 'לא ניתן לדעת', 'תלוי בגודל']
+    );
+    return {
+      text: `נכון או לא? "${fact.q}"`,
+      hint: '💡 חשבו על ההגדרה של אלכסון',
+      options, correctIdx,
+      explanation: fact.exp,
+      visual: null
+    };
+  } else {
+    const s = shapes[randInt(1, 3)];
+    const { options, correctIdx } = makeOptions(
+      s.name,
+      shapes.filter(x => x.n !== s.n).map(x => x.name)
+    );
+    return {
+      text: `באיזה מצולע יש בדיוק ${s.diags} אלכסונים?`,
+      hint: '💡 נוסחה: n×(n-3)÷2',
+      options, correctIdx,
+      explanation: `${s.name} (${s.n} צלעות): ${s.n}×(${s.n}-3)÷2 = ${s.diags} אלכסונים`,
+      visual: drawPolygonWithDiags(s.n, s.name)
+    };
+  }
+}
+
+// --- QUADRILATERAL PROPERTIES ---
+function genQuadProps() {
+  const quads = {
+    square: {
+      name: 'ריבוע', props: [
+        'כל הצלעות שוות',
+        'כל הזוויות ישרות (90°)',
+        'האלכסונים שווים ומאונכים',
+        'האלכסונים חוצים זה את זה',
+        'יש 2 זוגות צלעות מקבילות'
+      ]
+    },
+    rectangle: {
+      name: 'מלבן', props: [
+        'צלעות נגדיות שוות',
+        'כל הזוויות ישרות (90°)',
+        'האלכסונים שווים',
+        'האלכסונים חוצים זה את זה',
+        'יש 2 זוגות צלעות מקבילות'
+      ]
+    },
+    rhombus: {
+      name: 'מעוין', props: [
+        'כל הצלעות שוות',
+        'זוויות נגדיות שוות',
+        'האלכסונים מאונכים',
+        'האלכסונים חוצים זה את זה',
+        'יש 2 זוגות צלעות מקבילות'
+      ]
+    },
+    parallelogram: {
+      name: 'מקבילית', props: [
+        'צלעות נגדיות שוות ומקבילות',
+        'זוויות נגדיות שוות',
+        'האלכסונים חוצים זה את זה',
+        'סכום כל שתי זוויות שכנות = 180°',
+        'יש 2 זוגות צלעות מקבילות'
+      ]
+    },
+    trapezoid: {
+      name: 'טרפז', props: [
+        'יש בדיוק זוג אחד של צלעות מקבילות',
+        'הצלעות המקבילות נקראות בסיסים',
+        'סכום זוויות ליד שוק = 180°',
+      ]
+    }
+  };
+
+  const type = randInt(0, 3);
+
+  if (type === 0) {
+    const uniqueProps = [
+      { prop: 'כל הצלעות שוות וכל הזוויות ישרות', answer: 'ריבוע', wrong: ['מלבן', 'מעוין', 'מקבילית'] },
+      { prop: 'צלעות נגדיות שוות וכל הזוויות ישרות, אבל לא כל הצלעות שוות', answer: 'מלבן', wrong: ['ריבוע', 'מעוין', 'טרפז'] },
+      { prop: 'כל הצלעות שוות אבל הזוויות לא בהכרח ישרות', answer: 'מעוין', wrong: ['ריבוע', 'מלבן', 'מקבילית'] },
+      { prop: 'יש בדיוק זוג אחד של צלעות מקבילות', answer: 'טרפז', wrong: ['מקבילית', 'מלבן', 'ריבוע'] },
+      { prop: 'צלעות נגדיות מקבילות ושוות, אבל הזוויות לא בהכרח ישרות ולא כל הצלעות שוות', answer: 'מקבילית', wrong: ['מלבן', 'ריבוע', 'טרפז'] },
+    ];
+    const item = pickRandom(uniqueProps);
+    const { options, correctIdx } = makeOptions(item.answer, item.wrong);
+    return {
+      text: `לאיזה מרובע מתאים התיאור: "${item.prop}"?`,
+      hint: '💡 חשבו על ההבדלים בין המרובעים',
+      options, correctIdx,
+      explanation: `התשובה: ${item.answer}. ${item.prop}`,
+      visual: null
+    };
+  } else if (type === 1) {
+    const keys = Object.keys(quads);
+    const key = pickRandom(keys);
+    const quad = quads[key];
+    const trueProp = pickRandom(quad.props);
+    const falseProps = [
+      `ב${quad.name} כל הזוויות חדות`,
+      `ב${quad.name} האלכסונים שווים תמיד`,
+      `ב${quad.name} יש 3 אלכסונים`,
+      `ב${quad.name} כל הצלעות מקבילות זו לזו`,
+    ];
+    const isTrue = Math.random() < 0.5;
+    const statement = isTrue ? `ב${quad.name}: ${trueProp}` : pickRandom(falseProps);
+    const { options, correctIdx } = makeOptions(
+      isTrue ? 'נכון ✓' : 'לא נכון ✗',
+      [isTrue ? 'לא נכון ✗' : 'נכון ✓', 'רק לפעמים', 'תלוי בגודל']
+    );
+    return {
+      text: `נכון או לא? "${statement}"`,
+      hint: '💡 נסו לדמיין את הצורה',
+      options, correctIdx,
+      explanation: isTrue ? `נכון! זו תכונה של ${quad.name}` : `לא נכון! זו לא תכונה מדויקת של ${quad.name}`,
+      visual: drawQuadrilateral(key)
+    };
+  } else if (type === 2) {
+    const keys = ['square', 'rectangle', 'rhombus', 'parallelogram', 'trapezoid'];
+    const key = pickRandom(keys);
+    const quad = quads[key];
+    const wrongNames = keys.filter(k => k !== key).map(k => quads[k].name);
+    const { options, correctIdx } = makeOptions(
+      quad.name,
+      shuffle(wrongNames).slice(0, 3)
+    );
+    return {
+      text: `מהו שם הצורה?`,
+      hint: '💡 שימו לב לצלעות ולזוויות',
+      options, correctIdx,
+      explanation: `זהו ${quad.name}. תכונה עיקרית: ${quad.props[0]}`,
+      visual: drawQuadrilateral(key)
+    };
+  } else {
+    const keys = Object.keys(quads);
+    const key = pickRandom(keys);
+    const quad = quads[key];
+    const wrongStatements = [
+      'כל הצלעות שוות',
+      'כל הזוויות ישרות',
+      'האלכסונים מאונכים',
+      'יש בדיוק זוג מקבילי אחד',
+      'האלכסונים שווים',
+      'זוויות נגדיות שוות',
+    ];
+    const notProp = wrongStatements.find(s => !quad.props.some(p => p.includes(s.slice(0, 10))));
+    if (!notProp) return genQuadProps();
+    const { options, correctIdx } = makeOptions(
+      notProp,
+      shuffle(quad.props).slice(0, 3)
+    );
+    return {
+      text: `איזו תכונה לא מתאימה ל${quad.name}?`,
+      hint: '💡 חשבו על כל תכונות הצורה',
+      options, correctIdx,
+      explanation: `"${notProp}" זו לא בהכרח תכונה של ${quad.name}`,
+      visual: drawQuadrilateral(key)
+    };
+  }
+}
+
+// --- TRIANGLES ---
+function genTriangles() {
+  const type = randInt(0, 4);
+
+  if (type === 0) {
+    const tris = [
+      { name: 'שווה צלעות', sides: [5, 5, 5], type: 'equilateral', exp: 'כל 3 הצלעות שוות, לכן זה משולש שווה צלעות' },
+      { name: 'שווה שוקיים', sides: [5, 5, 3], type: 'isosceles', exp: 'שתי צלעות שוות (השוקיים), לכן זה משולש שווה שוקיים' },
+      { name: 'שונה צלעות', sides: [3, 4, 6], type: 'scalene', exp: 'כל הצלעות שונות, לכן זה משולש שונה צלעות' },
+    ];
+    const tri = pickRandom(tris);
+    const { options, correctIdx } = makeOptions(
+      tri.name,
+      tris.filter(t => t.name !== tri.name).map(t => t.name).concat(['ישר זווית'])
+    );
+    return {
+      text: `מה סוג המשולש? (לפי צלעות)`,
+      hint: '💡 בדקו אם יש צלעות שוות',
+      options, correctIdx,
+      explanation: tri.exp,
+      visual: drawTriangle(tri.type, { sides: tri.sides })
+    };
+  } else if (type === 1) {
+    const tris = [
+      { name: 'חד זווית', desc: 'כל הזוויות קטנות מ-90°', type: 'acute', angles: [70, 60, 50] },
+      { name: 'ישר זווית', desc: 'יש זווית אחת של 90°', type: 'right', angles: [90, 45, 45] },
+      { name: 'קהה זווית', desc: 'יש זווית אחת גדולה מ-90°', type: 'obtuse', angles: [120, 35, 25] },
+    ];
+    const tri = pickRandom(tris);
+    const { options, correctIdx } = makeOptions(
+      tri.name,
+      tris.filter(t => t.name !== tri.name).map(t => t.name).concat(['שווה צלעות'])
+    );
+    return {
+      text: `המשולש הזה הוא... (לפי זוויות)`,
+      hint: `💡 הזוויות: ${tri.angles.join('°, ')}°`,
+      options, correctIdx,
+      explanation: `${tri.desc}. הזוויות: ${tri.angles.join('° + ')}° = 180°`,
+      visual: drawTriangle(tri.type)
+    };
+  } else if (type === 2) {
+    const a1 = randInt(30, 80);
+    const a2 = randInt(30, 150 - a1 - 10);
+    const a3 = 180 - a1 - a2;
+    const { options, correctIdx } = makeOptions(
+      `${a3}°`,
+      [`${a3 + 10}°`, `${Math.max(10, a3 - 10)}°`, `${180 - a1}°`]
+    );
+    return {
+      text: `במשולש שתי זוויות הן ${a1}° ו-${a2}°. מהי הזווית השלישית?`,
+      hint: '💡 סכום הזוויות במשולש תמיד = 180°',
+      options, correctIdx,
+      explanation: `180° - ${a1}° - ${a2}° = ${a3}°`,
+      visual: null
+    };
+  } else if (type === 3) {
+    const facts = [
+      { q: 'סכום הזוויות במשולש הוא 180°', a: true, exp: 'נכון! זה כלל בסיסי בגיאומטריה' },
+      { q: 'במשולש שווה צלעות כל זווית שווה ל-60°', a: true, exp: 'נכון! 180° ÷ 3 = 60°' },
+      { q: 'במשולש יכולות להיות שתי זוויות ישרות', a: false, exp: 'לא! שתי זוויות ישרות = 180°, ולא נשאר מקום לזווית שלישית' },
+      { q: 'משולש שווה שוקיים הוא תמיד גם חד זווית', a: false, exp: 'לא! משולש שווה שוקיים יכול להיות גם קהה זווית או ישר זווית' },
+      { q: 'משולש ישר זווית יכול להיות גם שווה שוקיים', a: true, exp: 'נכון! למשל משולש עם זוויות 90°, 45°, 45°' },
+      { q: 'במשולש שווה צלעות כל הצלעות שוות', a: true, exp: 'נכון! זו ההגדרה של משולש שווה צלעות' },
+    ];
+    const fact = pickRandom(facts);
+    const { options, correctIdx } = makeOptions(
+      fact.a ? 'נכון ✓' : 'לא נכון ✗',
+      [fact.a ? 'לא נכון ✗' : 'נכון ✓', 'לא ניתן לדעת', 'רק לפעמים']
+    );
+    return {
+      text: `נכון או לא? "${fact.q}"`,
+      hint: '💡 חשבו בזהירות!',
+      options, correctIdx,
+      explanation: fact.exp,
+      visual: null
+    };
+  } else {
+    const a1 = randInt(20, 60);
+    const a2 = randInt(20, 60);
+    const a3Good = 180 - a1 - a2;
+    const a3Bad = 180 - a1 - a2 + randInt(5, 20);
+    const good = `${a1}°, ${a2}°, ${a3Good}°`;
+    const bad = `${a1}°, ${a2}°, ${a3Bad}°`;
+    const { options, correctIdx } = makeOptions( 
+      // --- AREA & PERIMETER OF RECT/SQUARE ---
+function genRectArea() {
+  const type = randInt(0, 5);
+
+  if (type === 0) {
+    const s = randInt(2, 12);
+    const A = s * s;
+    const { options, correctIdx } = makeOptions(
+      `${A} סמ״ר`,
+      [`${s * 4} סמ״ר`, `${s * 2} סמ״ר`, `${A + s} סמ״ר`]
+    );
+    return {
+      text: `מהו שטח הריבוע?`,
+      hint: '💡 שטח ריבוע = צלע × צלע',
+      options, correctIdx,
+      explanation: `שטח = ${s} × ${s} = ${A} סמ״ר`,
+      visual: drawSquare(s)
+    };
+  } else if (type === 1) {
+    const w = randInt(2, 12), h = randInt(2, 10);
+    const A = w * h;
+    const { options, correctIdx } = makeOptions(
+      `${A} סמ״ר`,
+      [`${2 * (w + h)} סמ״ר`, `${w + h} סמ״ר`, `${A + w} סמ״ר`]
+    );
+    return {
+      text: `מהו שטח המלבן?`,
+      hint: '💡 שטח מלבן = אורך × רוחב',
+      options, correctIdx,
+      explanation: `שטח = ${w} × ${h} = ${A} סמ״ר`,
+      visual: drawRectangle(w, h)
+    };
+  } else if (type === 2) {
+    const w = randInt(3, 12), h = randInt(2, 10);
+    const A = w * h;
+    const { options, correctIdx } = makeOptions(
+      `${h} ס״מ`,
+      [`${w} ס״מ`, `${A} ס״מ`, `${h + 2} ס״מ`]
+    );
+    return {
+      text: `שטח מלבן הוא ${A} סמ״ר. אורכו ${w} ס״מ. מהו רוחבו?`,
+      hint: `💡 שטח = אורך × רוחב, לכן רוחב = שטח ÷ אורך`,
+      options, correctIdx,
+      explanation: `רוחב = ${A} ÷ ${w} = ${h} ס״מ`,
+      visual: null
+    };
+  } else if (type === 3) {
+    const s = randInt(3, 10);
+    const A = s * s;
+    const P = s * 4;
+    const askArea = Math.random() < 0.5;
+    if (askArea) {
+      const { options, correctIdx } = makeOptions(
+        `${A} סמ״ר`,
+        [`${P} ס״מ`, `${s * 2} סמ״ר`, `${A + P} סמ״ר`]
+      );
+      return {
+        text: `צלע ריבוע היא ${s} ס״מ. מהו שטחו?`,
+        hint: '💡 שטח ריבוע = צלע × צלע (לא לבלבל עם היקף!)',
+        options, correctIdx,
+        explanation: `שטח = ${s} × ${s} = ${A} סמ״ר (היקף = ${P} ס״מ, זה דבר אחר!)`,
+        visual: drawSquare(s)
+      };
+    } else {
+      const { options, correctIdx } = makeOptions(
+        `${P} ס״מ`,
+        [`${A} סמ״ר`, `${s * 3} ס״מ`, `${P + s} ס״מ`]
+      );
+      return {
+        text: `צלע ריבוע היא ${s} ס״מ. מהו היקפו?`,
+        hint: '💡 היקף ריבוע = 4 × צלע (לא לבלבל עם שטח!)',
+        options, correctIdx,
+        explanation: `היקף = 4 × ${s} = ${P} ס״מ (שטח = ${A} סמ״ר, זה דבר אחר!)`,
+        visual: drawSquare(s)
+      };
+    }
+  } else if (type === 4) {
+    const problems = [
+      () => {
+        const s = randInt(3, 8);
+        const A = s * s;
+        return {
+          text: `גינה בצורת ריבוע, צלעה ${s} מטר. כמה אריחים של 1 מ״ר צריך כדי לכסות אותה?`,
+          hint: '💡 שטח = כמה אריחים של מ״ר אחד',
+          answer: `${A}`,
+          wrong: [`${s * 4}`, `${s * 2}`, `${A + s}`],
+          exp: `שטח = ${s} × ${s} = ${A} מ״ר, צריך ${A} אריחים`
+        };
+      },
+      () => {
+        const w = randInt(4, 10), h = randInt(3, 8);
+        const P = 2 * (w + h);
+        return {
+          text: `חדר בצורת מלבן, אורכו ${w} מ׳ ורוחבו ${h} מ׳. כמה מטר שוליים (פנלים) צריך?`,
+          hint: '💡 שוליים = היקף!',
+          answer: `${P} מטר`,
+          wrong: [`${w * h} מטר`, `${w + h} מטר`, `${P + w} מטר`],
+          exp: `היקף = 2 × (${w} + ${h}) = 2 × ${w + h} = ${P} מטר`
+        };
+      },
+      () => {
+        const w = randInt(5, 12), h = randInt(3, 8);
+        const A = w * h;
+        return {
+          text: `מגרש בצורת מלבן, אורכו ${w} מ׳ ורוחבו ${h} מ׳. מהו שטח המגרש?`,
+          hint: '💡 שטח = אורך × רוחב',
+          answer: `${A} מ״ר`,
+          wrong: [`${2*(w+h)} מ״ר`, `${w + h} מ״ר`, `${A + w} מ״ר`],
+          exp: `שטח = ${w} × ${h} = ${A} מ״ר`
+        };
+      },
+    ];
+    const prob = pickRandom(problems)();
+    const { options, correctIdx } = makeOptions(prob.answer, prob.wrong);
+    return {
+      text: prob.text,
+      hint: prob.hint,
+      options, correctIdx,
+      explanation: prob.exp,
+      visual: null
+    };
+  } else {
+    const isSquare = Math.random() < 0.5;
+    if (isSquare) {
+      const s = randInt(3, 15);
+      const P = s * 4;
+      const { options, correctIdx } = makeOptions(
+        `${s} ס״מ`,
+        [`${P} ס״מ`, `${s * 2} ס״מ`, `${s + 4} ס״מ`]
+      );
+      return {
+        text: `היקף ריבוע הוא ${P} ס״מ. מהי צלעו?`,
+        hint: '💡 צלע = היקף ÷ 4',
+        options, correctIdx,
+        explanation: `צלע = ${P} ÷ 4 = ${s} ס״מ`,
+        visual: null
+      };
+    } else {
+      const w = randInt(4, 12), h = randInt(3, 10);
+      const P = 2 * (w + h);
+      const { options, correctIdx } = makeOptions(
+        `${h} ס״מ`,
+        [`${w} ס״מ`, `${P / 2} ס״מ`, `${h + 2} ס״מ`]
+      );
+      return {
+        text: `היקף מלבן הוא ${P} ס״מ. אורכו ${w} ס״מ. מהו רוחבו?`,
+        hint: `💡 רוחב = (היקף ÷ 2) - אורך`,
+        options, correctIdx,
+        explanation: `חצי היקף = ${P} ÷ 2 = ${P / 2}. רוחב = ${P / 2} - ${w} = ${h} ס״מ`,
+        visual: null
+      };
+    }
+  }
+}
+
+// ============ GAME ENGINE ============
+
+const generators = {
+  diagonals: genDiagonals,
+  quadProps: genQuadProps,
+  triangles: genTriangles,
+  perimeter: genPerimeter,
+  rectArea: genRectArea,
+};
+
+const topicNames = {
+  diagonals: 'אלכסונים',
+  quadProps: 'תכונות מרובעים',
+  triangles: 'מיון משולשים',
+  perimeter: 'היקף מצולע',
+  rectArea: 'שטח והיקף',
+  all: 'סימולציית מבחן',
+};
+
+const allTopics = Object.keys(generators);
+
+function generateQuestions(topic, count) {
+  const qs = [];
+  for (let i = 0; i < count; i++) {
+    const t = topic === 'all' ? allTopics[i % allTopics.length] : topic;
+    try {
+      const q = generators[t]();
+      q.topic = t;
+      qs.push(q);
+    } catch (e) {
+      console.error('Error generating', t, e);
+      const q = genPerimeter();
+      q.topic = 'perimeter';
+      qs.push(q);
+    }
+  }
+  return topic === 'all' ? shuffle(qs) : qs;
+}
+
+function startTopic(topic) {
+  currentTopic = topic;
+  const count = topic === 'all' ? 10 : 8;
+  questions = generateQuestions(topic, count);
+  currentQ = 0;
+  correctScore = 0;
+  wrongScore = 0;
+  document.getElementById('topicSelection').style.display = 'none';
+  document.getElementById('progressContainer').classList.add('active');
+  document.getElementById('resultsScreen').classList.remove('active');
+  document.getElementById('backBtn').classList.add('show');
+  document.getElementById('correctCount').textContent = '0';
+  document.getElementById('wrongCount').textContent = '0';
+  updateProgress();
+  showQuestion();
+}
+
+function showQuestion() {
+  const q = questions[currentQ];
+  const card = document.getElementById('questionCard');
+  card.classList.remove('active');
+
+  setTimeout(() => {
+    document.getElementById('topicBadge').textContent = topicNames[q.topic] || '';
+    document.getElementById('questionText').innerHTML = q.text;
+    document.getElementById('questionHint').innerHTML = q.hint || '';
+
+    const vis = document.getElementById('visualArea');
+    vis.innerHTML = q.visual || '';
+
+    let h = '<div class="options-grid">';
+    q.options.forEach((opt, i) => {
+      h += `<button class="option-btn" onclick="checkAnswer(this,${i})">${opt}</button>`;
+    });
+    h += '</div>';
+    document.getElementById('answerArea').innerHTML = h;
+
+    document.getElementById('explanation').className = 'explanation';
+    document.getElementById('nextBtn').classList.remove('show');
+    card.classList.add('active');
+  }, 100);
+}
+
+function checkAnswer(btn, idx) {
+  const q = questions[currentQ];
+  const allBtns = document.querySelectorAll('.option-btn');
+  allBtns.forEach(b => b.disabled = true);
+
+  if (idx === q.correctIdx) {
+    btn.classList.add('correct');
+    correctScore++;
+    showExplanation(true, q.explanation);
+    if (Math.random() > 0.5) miniCelebration();
+  } else {
+    btn.classList.add('wrong');
+    allBtns[q.correctIdx].classList.add('correct');
+    wrongScore++;
+    showExplanation(false, q.explanation);
+  }
+  document.getElementById('correctCount').textContent = correctScore;
+  document.getElementById('wrongCount').textContent = wrongScore;
+  document.getElementById('nextBtn').classList.add('show');
+}
+
+function showExplanation(ok, text) {
+  const exp = document.getElementById('explanation');
+  exp.className = 'explanation show ' + (ok ? 'correct-exp' : 'wrong-exp');
+  document.getElementById('explanationTitle').innerHTML = ok ? '🎉 נכון מאוד!' : '😊 לא נורא, בוא נלמד!';
+  document.getElementById('explanationText').innerHTML = text;
+}
+
+function nextQuestion() {
+  currentQ++;
+  if (currentQ >= questions.length) showResults();
+  else { updateProgress(); showQuestion(); }
+}
+
+function updateProgress() {
+  document.getElementById('questionCounter').textContent = `שאלה ${currentQ + 1} מתוך ${questions.length}`;
+  document.getElementById('progressFill').style.width = `${(currentQ / questions.length) * 100}%`;
+}
+
+function showResults() {
+  document.getElementById('questionCard').classList.remove('active');
+  document.getElementById('progressContainer').classList.remove('active');
+  document.getElementById('backBtn').classList.remove('show');
+  const pct = Math.round((correctScore / questions.length) * 100);
+  document.getElementById('resultsScreen').classList.add('active');
+  document.getElementById('resultsScore').textContent = `${pct}%`;
+  document.getElementById('statCorrect').textContent = correctScore;
+  document.getElementById('statWrong').textContent = wrongScore;
+  document.getElementById('statTotal').textContent = questions.length;
+  if (pct >= 90) {
+    document.getElementById('resultsEmoji').textContent = '🏆';
+    document.getElementById('resultsTitle').textContent = 'מצוין! אלוף!';
+    document.getElementById('resultsMessage').textContent = 'הילל, אתה מוכן למבחן!';
+    celebration();
+  } else if (pct >= 70) {
+    document.getElementById('resultsEmoji').textContent = '🌟';
+    document.getElementById('resultsTitle').textContent = 'כל הכבוד!';
+    document.getElementById('resultsMessage').textContent = 'תוצאה טובה! כדאי לתרגל עוד קצת.';
+    miniCelebration();
+  } else if (pct >= 50) {
+    document.getElementById('resultsEmoji').textContent = '💪';
+    document.getElementById('resultsTitle').textContent = 'יש בסיס טוב!';
+    document.getElementById('resultsMessage').textContent = 'בוא נתרגל עוד, אתה בדרך הנכונה!';
+  } else {
+    document.getElementById('resultsEmoji').textContent = '📚';
+    document.getElementById('resultsTitle').textContent = 'בוא נתרגל עוד!';
+    document.getElementById('resultsMessage').textContent = 'לא נורא! תרגול עושה את ההבדל.';
+  }
+}
+
+function goToTopics() {
+  document.getElementById('resultsScreen').classList.remove('active');
+  document.getElementById('questionCard').classList.remove('active');
+  document.getElementById('progressContainer').classList.remove('active');
+  document.getElementById('backBtn').classList.remove('show');
+  document.getElementById('topicSelection').style.display = 'block';
+}
+
+// ============ CELEBRATIONS ============
+function celebration() {
+  const c = document.getElementById('confettiContainer');
+  const colors = ['#6C5CE7','#00B894','#FDCB6E','#2DC653','#E63946','#0984E3'];
+  for (let i = 0; i < 60; i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.left = Math.random()*100+'%';
+    p.style.background = colors[Math.floor(Math.random()*colors.length)];
+    p.style.animationDelay = Math.random()*2+'s';
+    p.style.animationDuration = (2+Math.random()*2)+'s';
+    p.style.borderRadius = Math.random()>0.5?'50%':'2px';
+    p.style.width = (6+Math.random()*8)+'px';
+    p.style.height = (6+Math.random()*8)+'px';
+    c.appendChild(p);
+  }
+  setTimeout(() => { c.innerHTML = ''; }, 5000);
+}
+
+function miniCelebration() {
+  const c = document.getElementById('confettiContainer');
+  for (let i = 0; i < 15; i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.left = (30+Math.random()*40)+'%';
+    p.style.background = ['#FDCB6E','#2DC653','#A29BFE'][Math.floor(Math.random()*3)];
+    p.style.animationDelay = Math.random()*0.5+'s';
+    p.style.animationDuration = (1.5+Math.random())+'s';
+    p.style.borderRadius = '50%';
+    p.style.width = '8px';
+    p.style.height = '8px';
+    c.appendChild(p);
+  }
+  setTimeout(() => { c.innerHTML = ''; }, 3000);
+}
+</script>
+</body>
+</html>
