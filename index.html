@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>לומדת גיאומטריה - כיתה ד׳</title>
+<title>תרגול למבחן - הילל כיתה ד׳</title>
 <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -272,6 +272,10 @@ body::after {
   transition: all 0.2s;
   text-align: center;
   line-height: 1.5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 58px;
 }
 
 .option-btn:hover {
@@ -475,6 +479,42 @@ body::after {
 
 .unit { font-weight: 500; }
 
+/* Math expressions kept LTR so operators read correctly */
+.expr {
+  direction: ltr;
+  unicode-bidi: isolate;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  vertical-align: middle;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Fractions */
+.frac {
+  display: inline-flex;
+  flex-direction: column;
+  text-align: center;
+  line-height: 1.05;
+  vertical-align: middle;
+  margin: 0 3px;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+}
+.frac-n { border-bottom: 2.5px solid currentColor; padding: 0 6px 2px; }
+.frac-d { padding: 2px 6px 0; }
+
+/* Highlighted digit (place value) */
+.num-big { font-family: 'Fredoka', sans-serif; font-weight: 700; letter-spacing: 1px; }
+.hl-digit {
+  color: var(--error);
+  background: #FFE3E3;
+  border-radius: 6px;
+  padding: 0 5px;
+  font-weight: 800;
+}
+
 @media (max-width: 600px) {
   .header h1 { font-size: 2rem; }
   .question-text { font-size: 1.2rem; }
@@ -488,8 +528,8 @@ body::after {
 
 <div class="app">
   <div class="header">
-    <h1>📐 לומדת גיאומטריה</h1>
-    <p>כיתה ד׳ - צורות, שטח והיקף</p>
+    <h1>🎯 מתכוננים למבחן</h1>
+    <p>הילל · כיתה ד׳ · מספרים, שברים וגיאומטריה</p>
   </div>
 
   <button class="back-btn" id="backBtn" onclick="goToTopics()">→ חזרה לנושאים</button>
@@ -509,43 +549,140 @@ body::after {
 
   <!-- Topic Selection -->
   <div id="topicSelection">
-    <div class="section-title">📘 צורות ותכונות</div>
+
+    <div class="section-title">📊 מספרים בתחום המיליון</div>
     <div class="topics-grid">
-      <div class="topic-card" data-color="purple" onclick="startTopic('diagonals')">
+      <div class="topic-card" data-color="purple" onclick="startTopic('placeValue')">
+        <span class="topic-icon">🏗️</span>
+        <div class="topic-title">מבנה עשרוני</div>
+        <div class="topic-desc">ערך הספרה לפי המקום</div>
+      </div>
+      <div class="topic-card" data-color="blue" onclick="startTopic('numberLine')">
+        <span class="topic-icon">📏</span>
+        <div class="topic-title">ישר המספרים</div>
+        <div class="topic-desc">קריאת מספרים ועיגול</div>
+      </div>
+      <div class="topic-card" data-color="green" onclick="startTopic('addSub')">
+        <span class="topic-icon">➕</span>
+        <div class="topic-title">חיבור וחיסור</div>
+        <div class="topic-desc">כולל תרגילים עם נעלמים</div>
+      </div>
+      <div class="topic-card" data-color="yellow" onclick="startTopic('distributive')">
+        <span class="topic-icon">🧩</span>
+        <div class="topic-title">חוק הפילוג</div>
+        <div class="topic-desc">פירוק כפל לחיבור</div>
+      </div>
+      <div class="topic-card" data-color="red" onclick="startTopic('multiply')">
+        <span class="topic-icon">✖️</span>
+        <div class="topic-title">כפל</div>
+        <div class="topic-desc">חד-ספרתי ודו-ספרתי</div>
+      </div>
+      <div class="topic-card" data-color="teal" onclick="startTopic('division')">
+        <span class="topic-icon">➗</span>
+        <div class="topic-title">חילוק</div>
+        <div class="topic-desc">כולל חילוק עם שארית</div>
+      </div>
+      <div class="topic-card" data-color="pink" onclick="startTopic('orderOps')">
+        <span class="topic-icon">🔢</span>
+        <div class="topic-title">סדר פעולות</div>
+        <div class="topic-desc">מה מחשבים קודם?</div>
+      </div>
+      <div class="topic-card" data-color="purple" onclick="startTopic('wordNum')">
+        <span class="topic-icon">📝</span>
+        <div class="topic-title">בעיות מילוליות</div>
+        <div class="topic-desc">סיפורי חשבון</div>
+      </div>
+    </div>
+
+    <div class="section-title">🍕 שברים פשוטים</div>
+    <div class="topics-grid">
+      <div class="topic-card" data-color="red" onclick="startTopic('fracId')">
+        <span class="topic-icon">🍕</span>
+        <div class="topic-title">מהו השבר?</div>
+        <div class="topic-desc">זיהוי שבר מתוך ציור</div>
+      </div>
+      <div class="topic-card" data-color="blue" onclick="startTopic('fracCompare')">
+        <span class="topic-icon">⚖️</span>
+        <div class="topic-title">השוואת שברים</div>
+        <div class="topic-desc">איזה שבר גדול יותר</div>
+      </div>
+      <div class="topic-card" data-color="green" onclick="startTopic('fracLine')">
+        <span class="topic-icon">📏</span>
+        <div class="topic-title">שברים על הישר</div>
+        <div class="topic-desc">מיקום שבר על ישר המספרים</div>
+      </div>
+      <div class="topic-card" data-color="yellow" onclick="startTopic('fracQuantity')">
+        <span class="topic-icon">🍫</span>
+        <div class="topic-title">שבר מתוך כמות</div>
+        <div class="topic-desc">חלק מתוך כמות שלמה</div>
+      </div>
+      <div class="topic-card" data-color="purple" onclick="startTopic('mixedImproper')">
+        <span class="topic-icon">🔄</span>
+        <div class="topic-title">מספר מעורב ושבר</div>
+        <div class="topic-desc">המרה הלוך ושוב</div>
+      </div>
+      <div class="topic-card" data-color="teal" onclick="startTopic('addSubFrac')">
+        <span class="topic-icon">➕</span>
+        <div class="topic-title">חיבור וחיסור שברים</div>
+        <div class="topic-desc">מכנים זהים וקרובים</div>
+      </div>
+      <div class="topic-card" data-color="pink" onclick="startTopic('multiplyFrac')">
+        <span class="topic-icon">✖️</span>
+        <div class="topic-title">כפל שלם בשבר</div>
+        <div class="topic-desc">מספר שלם כפול שבר</div>
+      </div>
+      <div class="topic-card" data-color="red" onclick="startTopic('wordFrac')">
+        <span class="topic-icon">📝</span>
+        <div class="topic-title">בעיות מילוליות</div>
+        <div class="topic-desc">סיפורי חשבון בשברים</div>
+      </div>
+    </div>
+
+    <div class="section-title">📐 גיאומטריה</div>
+    <div class="topics-grid">
+      <div class="topic-card" data-color="blue" onclick="startTopic('parallelPerp')">
+        <span class="topic-icon">📐</span>
+        <div class="topic-title">מקבילים ומאונכים</div>
+        <div class="topic-desc">ישרים מקבילים וניצבים</div>
+      </div>
+      <div class="topic-card" data-color="purple" onclick="startTopic('quadProps')">
+        <span class="topic-icon">🔷</span>
+        <div class="topic-title">תכונות המרובעים</div>
+        <div class="topic-desc">ריבוע, מלבן, מעוין, מקבילית, טרפז, דלתון</div>
+      </div>
+      <div class="topic-card" data-color="red" onclick="startTopic('diagonals')">
         <span class="topic-icon">✖️</span>
         <div class="topic-title">אלכסונים</div>
-        <div class="topic-desc">זיהוי וספירת אלכסונים במצולעים</div>
+        <div class="topic-desc">אלכסונים במצולע</div>
       </div>
-      <div class="topic-card" data-color="blue" onclick="startTopic('quadProps')">
-        <span class="topic-icon">🔷</span>
-        <div class="topic-title">תכונות מרובעים</div>
-        <div class="topic-desc">ריבוע, מלבן, מעוין, מקבילית, טרפז</div>
-      </div>
-      <div class="topic-card" data-color="green" onclick="startTopic('triangles')">
-        <span class="topic-icon">🔺</span>
-        <div class="topic-title">מיון משולשים</div>
-        <div class="topic-desc">לפי זוויות ולפי צלעות</div>
-      </div>
-    </div>
-    <div class="section-title">📗 חישובים</div>
-    <div class="topics-grid">
-      <div class="topic-card" data-color="yellow" onclick="startTopic('perimeter')">
-        <span class="topic-icon">📏</span>
-        <div class="topic-title">היקף מצולע</div>
-        <div class="topic-desc">חישוב היקף על ידי חיבור צלעות</div>
-      </div>
-      <div class="topic-card" data-color="red" onclick="startTopic('rectArea')">
+      <div class="topic-card" data-color="green" onclick="startTopic('rectArea')">
         <span class="topic-icon">⬛</span>
-        <div class="topic-title">שטח והיקף מלבן וריבוע</div>
-        <div class="topic-desc">נוסחאות שטח והיקף</div>
+        <div class="topic-title">שטח והיקף</div>
+        <div class="topic-desc">מלבן וריבוע</div>
       </div>
     </div>
-    <div class="section-title">🌟 סיכום</div>
+
+    <div class="section-title">🏆 סימולציות מבחן</div>
     <div class="topics-grid">
+      <div class="topic-card" data-color="purple" onclick="startTopic('mockNum')">
+        <span class="topic-icon">📊</span>
+        <div class="topic-title">מבחן - מספרים</div>
+        <div class="topic-desc">10 שאלות מעורבות</div>
+      </div>
+      <div class="topic-card" data-color="red" onclick="startTopic('mockFrac')">
+        <span class="topic-icon">🍕</span>
+        <div class="topic-title">מבחן - שברים</div>
+        <div class="topic-desc">10 שאלות מעורבות</div>
+      </div>
+      <div class="topic-card" data-color="blue" onclick="startTopic('mockGeo')">
+        <span class="topic-icon">📐</span>
+        <div class="topic-title">מבחן - גיאומטריה</div>
+        <div class="topic-desc">10 שאלות מעורבות</div>
+      </div>
       <div class="topic-card" data-color="teal" onclick="startTopic('all')" style="grid-column: 1 / -1;">
         <span class="topic-icon">🏆</span>
-        <div class="topic-title">סימולציית מבחן - כל הנושאים!</div>
-        <div class="topic-desc">10 שאלות מעורבות מכל הסוגים</div>
+        <div class="topic-title">סימולציית מבחן מלאה - כל הנושאים!</div>
+        <div class="topic-desc">15 שאלות מכל הנושאים יחד</div>
       </div>
     </div>
   </div>
@@ -605,6 +742,74 @@ function shuffle(arr) {
 
 function pickRandom(arr) { return arr[randInt(0, arr.length - 1)]; }
 
+function formatNum(n) { return Number(n).toLocaleString('en-US'); }
+
+const PLACE_NAMES = ['אחדות', 'עשרות', 'מאות', 'אלפים', 'עשרות אלפים', 'מאות אלפים', 'מיליונים'];
+
+// Pick up to 3 distractors that are all distinct from the correct answer and from
+// each other. Candidates are tried in order; pass extras so we always reach 3.
+function distinctWrongs(correctHtml, candidates) {
+  const out = [];
+  const seen = new Set([correctHtml]);
+  for (const c of candidates) {
+    if (c == null) continue;
+    if (!seen.has(c)) { out.push(c); seen.add(c); }
+    if (out.length >= 3) break;
+  }
+  return out;
+}
+
+// Build options from EXACTLY the values provided (no padding with junk)
+function fixedOptions(correctHtml, wrongHtmlArr) {
+  const opts = [{ h: correctHtml, c: true }];
+  for (const w of wrongHtmlArr) opts.push({ h: w, c: false });
+  const sh = shuffle(opts);
+  return { options: sh.map(o => o.h), correctIdx: sh.findIndex(o => o.c) };
+}
+
+// 3 distinct positive integer distractors around a correct value
+function distinctNums(correct, candidates) {
+  const out = [];
+  const seen = new Set([correct]);
+  for (const c of candidates) {
+    if (c > 0 && Number.isFinite(c) && !seen.has(c)) { out.push(c); seen.add(c); }
+    if (out.length >= 3) break;
+  }
+  let step = 1;
+  while (out.length < 3) {
+    const c = correct + (Math.random() < 0.5 ? step : -step);
+    if (c > 0 && !seen.has(c)) { out.push(c); seen.add(c); }
+    step++;
+    if (step > 200) break;
+  }
+  return out.slice(0, 3);
+}
+
+// numeric question -> {options, correctIdx} with formatted strings
+function numOptions(correct, candidates) {
+  const wrongs = distinctNums(correct, candidates).map(formatNum);
+  return fixedOptions(formatNum(correct), wrongs);
+}
+
+// Math display helpers (kept LTR)
+function expr(inner) { return `<span class="expr">${inner}</span>`; }
+function frac(n, d) { return `<span class="frac"><span class="frac-n">${n}</span><span class="frac-d">${d}</span></span>`; }
+function mixed(w, n, d) { return `<span class="expr">${w}&nbsp;${frac(n, d)}</span>`; }
+function efrac(n, d) { return expr(frac(n, d)); }
+
+// Render a number with thousands separators and one highlighted digit (by place from right)
+function renderNumberHighlight(num, posFromRight) {
+  const s = String(num);
+  const L = s.length;
+  const targetIdx = L - 1 - posFromRight;
+  let out = '';
+  for (let i = 0; i < L; i++) {
+    if (i > 0 && (L - i) % 3 === 0) out += ',';
+    out += (i === targetIdx) ? `<span class="hl-digit">${s[i]}</span>` : s[i];
+  }
+  return `<span class="num-big" dir="ltr">${out}</span>`;
+}
+
 function makeOptions(correctVal, wrongVals) {
   const opts = [{ html: correctVal, key: 'correct' }];
   const seen = new Set([correctVal]);
@@ -643,6 +848,8 @@ const C = {
   dimText: '#0984E3',
   angleArc: '#FDCB6E',
   right: '#E63946',
+  fill: '#6C5CE7',
+  empty: '#F0EEFF',
 };
 
 function svgLine(x1, y1, x2, y2, color = C.shape, width = 2.5, dash = '') {
@@ -672,7 +879,7 @@ function svgRightAngle(cx, cy, size = 12) {
   return `<rect x="${cx}" y="${cy - size}" width="${size}" height="${size}" fill="none" stroke="${C.right}" stroke-width="1.5"/>`;
 }
 
-// ============ SHAPE DRAWINGS ============
+// ============ SHAPE DRAWINGS (geometry) ============
 
 function drawSquare(side, showDims = true, showDiags = false) {
   const s = 120, ox = 100, oy = 40;
@@ -682,7 +889,6 @@ function drawSquare(side, showDims = true, showDiags = false) {
     svg += svgDimension(pts[0][0], pts[0][1], pts[1][0], pts[1][1], `${side} ס״מ`, -22);
     svg += svgDimension(pts[1][0], pts[1][1], pts[2][0], pts[2][1], `${side} ס״מ`, -22);
   }
-  // Right angles
   svg += svgRightAngle(pts[0][0], pts[0][1] + 12);
   svg += svgRightAngle(pts[1][0] - 12, pts[1][1] + 12);
   if (showDiags) {
@@ -711,74 +917,6 @@ function drawRectangle(w, h, showDims = true, showDiags = false) {
   return svgWrap(svg, 320, 210);
 }
 
-function drawTriangle(type, labels) {
-  // Types: equilateral, isosceles, scalene, right, obtuse, acute
-  let pts, angleInfo = '';
-  const ox = 160, oy = 30;
-  switch (type) {
-    case 'equilateral':
-      pts = [[ox, oy], [ox + 70, oy + 130], [ox - 70, oy + 130]];
-      break;
-    case 'isosceles':
-      pts = [[ox, oy], [ox + 80, oy + 130], [ox - 80, oy + 130]];
-      break;
-    case 'scalene':
-      pts = [[ox - 30, oy], [ox + 90, oy + 130], [ox - 80, oy + 130]];
-      break;
-    case 'right':
-      pts = [[ox - 70, oy + 10], [ox + 70, oy + 140], [ox - 70, oy + 140]];
-      angleInfo = svgRightAngle(pts[2][0], pts[2][1]);
-      break;
-    case 'obtuse':
-      pts = [[ox + 50, oy], [ox + 90, oy + 130], [ox - 90, oy + 130]];
-      break;
-    case 'acute':
-      pts = [[ox, oy], [ox + 65, oy + 120], [ox - 65, oy + 120]];
-      break;
-    default:
-      pts = [[ox, oy], [ox + 70, oy + 130], [ox - 70, oy + 130]];
-  }
-  let svg = svgPolygon(pts);
-  svg += angleInfo;
-  if (labels) {
-    // Side labels
-    for (let i = 0; i < 3; i++) {
-      const j = (i + 1) % 3;
-      const mx = (pts[i][0] + pts[j][0]) / 2;
-      const my = (pts[i][1] + pts[j][1]) / 2;
-      const dx = pts[j][0] - pts[i][0], dy = pts[j][1] - pts[i][1];
-      const len = Math.sqrt(dx * dx + dy * dy);
-      const nx = -dy / len * 16, ny = dx / len * 16;
-      if (labels.sides && labels.sides[i] != null) {
-        svg += svgText(mx + nx, my + ny, `${labels.sides[i]}`, 13, C.dimText);
-      }
-    }
-  }
-  return svgWrap(svg, 320, 200);
-}
-
-function drawGenericPolygon(n, sides, name) {
-  const cx = 160, cy = 100, r = 75;
-  const pts = [];
-  for (let i = 0; i < n; i++) {
-    const angle = -Math.PI / 2 + (2 * Math.PI * i) / n;
-    pts.push([cx + r * Math.cos(angle), cy + r * Math.sin(angle)]);
-  }
-  let svg = svgPolygon(pts);
-  // Side labels
-  for (let i = 0; i < n; i++) {
-    const j = (i + 1) % n;
-    const mx = (pts[i][0] + pts[j][0]) / 2;
-    const my = (pts[i][1] + pts[j][1]) / 2;
-    const dx = pts[j][0] - pts[i][0], dy = pts[j][1] - pts[i][1];
-    const len = Math.sqrt(dx * dx + dy * dy);
-    const nx = -dy / len * 18, ny = dx / len * 18;
-    svg += svgText(mx + nx, my + ny, `${sides[i]}`, 12, C.dimText);
-  }
-  if (name) svg += svgText(cx, cy + r + 30, name, 14, C.label);
-  return svgWrap(svg, 320, 230);
-}
-
 function drawPolygonWithDiags(n, name) {
   const cx = 160, cy = 100, r = 75;
   const pts = [];
@@ -787,17 +925,13 @@ function drawPolygonWithDiags(n, name) {
     pts.push([cx + r * Math.cos(angle), cy + r * Math.sin(angle)]);
   }
   let svg = svgPolygon(pts);
-  // Draw all diagonals
   for (let i = 0; i < n; i++) {
     for (let j = i + 2; j < n; j++) {
-      if (i === 0 && j === n - 1) continue; // skip sides
+      if (i === 0 && j === n - 1) continue;
       svg += svgLine(pts[i][0], pts[i][1], pts[j][0], pts[j][1], C.diag, 2, '6,4');
     }
   }
-  // Vertex labels
   for (let i = 0; i < n; i++) {
-    const dx = pts[i][0] - cx, dy = pts[i][1] - cy;
-    const dl = Math.sqrt(dx * dx + dy * dy);
     svg += `<circle cx="${pts[i][0]}" cy="${pts[i][1]}" r="4" fill="${C.shape}"/>`;
   }
   svg += svgText(cx, cy + r + 30, name, 14, C.label);
@@ -832,7 +966,7 @@ function drawQuadrilateral(type) {
       break;
     case 'kite':
       pts = [[ox + 110, oy], [ox + 190, oy + 70], [ox + 110, oy + 150], [ox + 30, oy + 70]];
-      name = 'עפיפון';
+      name = 'דלתון';
       break;
     default:
       pts = [[ox + 40, oy], [ox + 160, oy], [ox + 160, oy + 120], [ox + 40, oy + 120]];
@@ -843,7 +977,718 @@ function drawQuadrilateral(type) {
   return svgWrap(svg, 320, 210);
 }
 
-// ============ GENERATORS ============
+// ============ SHAPE DRAWINGS (numbers & fractions) ============
+
+function drawNumberLine(min, max, step, arrowVal) {
+  const W = 380, H = 110, lx = 35, rx = W - 35, lineY = 66;
+  const xFor = v => lx + (v - min) / (max - min) * (rx - lx);
+  const count = Math.round((max - min) / step);
+  let svg = svgLine(lx - 6, lineY, rx + 6, lineY, C.shape, 3);
+  // arrowheads on the line
+  svg += `<polygon points="${rx + 6},${lineY} ${rx - 4},${lineY - 5} ${rx - 4},${lineY + 5}" fill="${C.shape}"/>`;
+  svg += `<polygon points="${lx - 6},${lineY} ${lx + 4},${lineY - 5} ${lx + 4},${lineY + 5}" fill="${C.shape}"/>`;
+  const labelAll = count <= 10;
+  for (let i = 0; i <= count; i++) {
+    const v = min + i * step;
+    const x = xFor(v);
+    svg += svgLine(x, lineY - 7, x, lineY + 7, C.shape, 2);
+    if (labelAll || i === 0 || i === count) {
+      svg += svgText(x, lineY + 26, formatNum(v), 13, C.label);
+    }
+  }
+  // arrow (pointing down to the value)
+  const ax = xFor(arrowVal);
+  svg += `<polygon points="${ax},${lineY - 4} ${ax - 8},${lineY - 24} ${ax + 8},${lineY - 24}" fill="${C.error}"/>`;
+  svg += svgText(ax, lineY - 30, '?', 18, C.error);
+  return svgWrap(svg, W, H);
+}
+
+function drawFractionBar(shaded, total) {
+  const W = 300, H = 80, ox = 18, oy = 20, bw = W - 36, bh = 42;
+  const cw = bw / total;
+  let svg = '';
+  for (let i = 0; i < total; i++) {
+    const x = ox + i * cw;
+    const fill = i < shaded ? C.fill : C.empty;
+    svg += `<rect x="${x}" y="${oy}" width="${cw}" height="${bh}" fill="${fill}" stroke="${C.shape}" stroke-width="2"/>`;
+  }
+  return svgWrap(svg, W, H);
+}
+
+function drawFractionCircle(shaded, total) {
+  const W = 190, H = 190, cx = 95, cy = 95, r = 78;
+  let svg = '';
+  for (let i = 0; i < total; i++) {
+    const a0 = (-90 + i * 360 / total) * Math.PI / 180;
+    const a1 = (-90 + (i + 1) * 360 / total) * Math.PI / 180;
+    const x0 = cx + r * Math.cos(a0), y0 = cy + r * Math.sin(a0);
+    const x1 = cx + r * Math.cos(a1), y1 = cy + r * Math.sin(a1);
+    const large = (360 / total) > 180 ? 1 : 0;
+    const fill = i < shaded ? C.fill : C.empty;
+    if (total === 1) {
+      svg += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${fill}" stroke="${C.shape}" stroke-width="2"/>`;
+    } else {
+      svg += `<path d="M ${cx} ${cy} L ${x0} ${y0} A ${r} ${r} 0 ${large} 1 ${x1} ${y1} Z" fill="${fill}" stroke="${C.shape}" stroke-width="2"/>`;
+    }
+  }
+  return svgWrap(svg, W, H);
+}
+
+function drawFractionLine(total, mark) {
+  const W = 380, H = 100, lx = 35, rx = W - 35, lineY = 56;
+  const xFor = k => lx + (k / total) * (rx - lx);
+  let svg = svgLine(lx, lineY, rx, lineY, C.shape, 3);
+  for (let i = 0; i <= total; i++) {
+    const x = xFor(i);
+    svg += svgLine(x, lineY - 7, x, lineY + 7, C.shape, 2);
+  }
+  svg += svgText(lx, lineY + 26, '0', 14, C.label);
+  svg += svgText(rx, lineY + 26, '1', 14, C.label);
+  const ax = xFor(mark);
+  svg += `<polygon points="${ax},${lineY - 4} ${ax - 8},${lineY - 24} ${ax + 8},${lineY - 24}" fill="${C.error}"/>`;
+  svg += svgText(ax, lineY - 30, '?', 18, C.error);
+  return svgWrap(svg, W, H);
+}
+
+function drawParallelPerp(type) {
+  const W = 300, H = 170;
+  let svg = '', name = '';
+  if (type === 'parallel') {
+    svg += svgLine(40, 60, 260, 60, C.shape, 4);
+    svg += svgLine(40, 115, 260, 115, C.shape, 4);
+  } else if (type === 'perpendicular') {
+    svg += svgLine(40, 100, 260, 100, C.shape, 4);
+    svg += svgLine(150, 25, 150, 150, C.shape, 4);
+    svg += `<rect x="150" y="86" width="14" height="14" fill="none" stroke="${C.right}" stroke-width="2"/>`;
+  } else { // intersecting (not perpendicular)
+    svg += svgLine(45, 40, 255, 150, C.shape, 4);
+    svg += svgLine(45, 150, 255, 40, C.shape, 4);
+  }
+  return svgWrap(svg, W, H);
+}
+
+// ============ GENERATORS: NUMBERS ============
+
+function genPlaceValue() {
+  const v = randInt(0, 3);
+  if (v === 0) {
+    // value of highlighted digit
+    let num, pos, digit;
+    do {
+      num = randInt(100000, 999999);
+      pos = randInt(0, 5);
+      digit = Number(String(num)[5 - pos]);
+    } while (digit === 0);
+    const value = digit * Math.pow(10, pos);
+    const { options, correctIdx } = numOptions(value, [digit, value * 10, Math.max(1, value / 10), digit * Math.pow(10, Math.max(0, pos - 1))]);
+    return {
+      text: `מהו ערך הספרה הצבועה במספר?<br>${renderNumberHighlight(num, pos)}`,
+      hint: '💡 הערך תלוי במקום של הספרה (אחדות, עשרות, מאות...)',
+      options, correctIdx,
+      explanation: `הספרה ${digit} נמצאת במקום ה${PLACE_NAMES[pos]}, לכן ערכה ${formatNum(value)}.`,
+      visual: null
+    };
+  } else if (v === 1) {
+    // how many whole thousands / hundreds
+    const num = randInt(12000, 980000);
+    const useThousands = Math.random() < 0.5;
+    const unit = useThousands ? 1000 : 100;
+    const word = useThousands ? 'אלפים' : 'מאות';
+    const ans = Math.floor(num / unit);
+    const { options, correctIdx } = numOptions(ans, [Number(String(num)[useThousands ? String(num).length - 4 : String(num).length - 3] || 0), Math.floor(num / (unit / 10)), Math.floor(num / (unit * 10))]);
+    return {
+      text: `כמה ${word} שלמים יש במספר ${formatNum(num)}?`,
+      hint: `💡 ${word} שלמים = כמה פעמים ${formatNum(unit)} נכנס במספר`,
+      options, correctIdx,
+      explanation: `${formatNum(num)} ÷ ${formatNum(unit)} = ${formatNum(ans)} (בלי השארית), לכן יש ${formatNum(ans)} ${word} שלמים.`,
+      visual: null
+    };
+  } else if (v === 2) {
+    // expanded form -> number
+    const num = randInt(100000, 999999);
+    const s = String(num);
+    const parts = [];
+    for (let i = 0; i < s.length; i++) {
+      const d = Number(s[i]);
+      if (d !== 0) parts.push(d * Math.pow(10, s.length - 1 - i));
+    }
+    const expanded = parts.map(formatNum).join(' + ');
+    const { options, correctIdx } = numOptions(num, [num + 100, num - 1000, num + 10000]);
+    return {
+      text: `איזה מספר שווה ל:<br>${expr(expanded)}?`,
+      hint: '💡 חברו את כל הערכים יחד',
+      options, correctIdx,
+      explanation: `${expr(expanded)} = ${formatNum(num)}`,
+      visual: null
+    };
+  } else {
+    // which digit sits in a given place
+    let num, pos, digit;
+    do {
+      num = randInt(100000, 999999);
+      pos = randInt(0, 5);
+      digit = Number(String(num)[5 - pos]);
+    } while (digit === 0);
+    const s = String(num);
+    const others = s.split('').map(Number).filter(d => d !== digit);
+    const wrongs = [];
+    for (const o of others) { if (wrongs.length < 3 && !wrongs.includes(o)) wrongs.push(o); }
+    while (wrongs.length < 3) { const r = randInt(0, 9); if (r !== digit && !wrongs.includes(r)) wrongs.push(r); }
+    const { options, correctIdx } = fixedOptions(String(digit), wrongs.map(String));
+    return {
+      text: `איזו ספרה נמצאת במקום ה${PLACE_NAMES[pos]} במספר ${formatNum(num)}?`,
+      hint: '💡 ספרו את המקומות מימין: אחדות, עשרות, מאות...',
+      options, correctIdx,
+      explanation: `במקום ה${PLACE_NAMES[pos]} נמצאת הספרה ${digit}.`,
+      visual: null
+    };
+  }
+}
+
+function genNumberLine() {
+  const v = randInt(0, 2);
+  if (v === 0) {
+    // read the arrow on the line
+    const steps = [10, 50, 100, 500, 1000];
+    const step = pickRandom(steps);
+    const min = step * randInt(0, 3);
+    const max = min + step * 10;
+    const idx = randInt(1, 9);
+    const val = min + idx * step;
+    const { options, correctIdx } = numOptions(val, [val + step, val - step, val + 2 * step]);
+    return {
+      text: `לאיזה מספר מצביע החץ על ישר המספרים?`,
+      hint: '💡 כל קפיצה בין שני קווים שווה לאותו מרחק',
+      options, correctIdx,
+      explanation: `כל מרווח = ${formatNum(step)}. החץ נמצא במקום ה-${idx}, לכן: ${formatNum(min)} + ${idx} × ${formatNum(step)} = ${formatNum(val)}.`,
+      visual: drawNumberLine(min, max, step, val)
+    };
+  } else if (v === 1) {
+    // rounding
+    const targets = [10, 100, 1000];
+    const t = pickRandom(targets);
+    const tName = t === 10 ? 'לעשרת' : (t === 100 ? 'למאה' : 'לאלף');
+    const num = randInt(t * 2 + 1, 99999);
+    const rounded = Math.round(num / t) * t;
+    const down = Math.floor(num / t) * t;
+    const up = down + t;
+    const { options, correctIdx } = numOptions(rounded, [rounded === down ? up : down, rounded + t, Math.max(0, rounded - t)]);
+    return {
+      text: `עגלו את המספר ${formatNum(num)} ${tName} הקרובה ביותר.`,
+      hint: `💡 בודקים אם המספר קרוב יותר ל-${formatNum(down)} או ל-${formatNum(up)}`,
+      options, correctIdx,
+      explanation: `${formatNum(num)} נמצא בין ${formatNum(down)} ל-${formatNum(up)}, וקרוב יותר ל-${formatNum(rounded)}.`,
+      visual: null
+    };
+  } else {
+    // which number is between
+    const a = randInt(1000, 8000);
+    const b = a + randInt(2000, 4000);
+    const between = randInt(a + 1, b - 1);
+    const { options, correctIdx } = numOptions(between, [a - randInt(100, 900), b + randInt(100, 900), b + randInt(1000, 3000)]);
+    return {
+      text: `איזה מספר נמצא בין ${formatNum(a)} ל-${formatNum(b)} על ישר המספרים?`,
+      hint: '💡 חפשו מספר שגדול מהקטן וקטן מהגדול',
+      options, correctIdx,
+      explanation: `${formatNum(between)} גדול מ-${formatNum(a)} וגם קטן מ-${formatNum(b)}, לכן הוא ביניהם.`,
+      visual: null
+    };
+  }
+}
+
+function genAddSub() {
+  const v = randInt(0, 3);
+  if (v === 0) {
+    const a = randInt(1200, 48000), b = randInt(1200, 48000);
+    const res = a + b;
+    const { options, correctIdx } = numOptions(res, [res + 100, res - 1000, res + 10]);
+    return {
+      text: `כמה זה ${expr(`${formatNum(a)} + ${formatNum(b)}`)}?`,
+      hint: '💡 חברו לפי מקומות: אחדות, עשרות, מאות...',
+      options, correctIdx,
+      explanation: `${formatNum(a)} + ${formatNum(b)} = ${formatNum(res)}`,
+      visual: null
+    };
+  } else if (v === 1) {
+    const a = randInt(20000, 90000), b = randInt(1000, a - 500);
+    const res = a - b;
+    const { options, correctIdx } = numOptions(res, [res + 100, res - 100, res + 1000]);
+    return {
+      text: `כמה זה ${expr(`${formatNum(a)} − ${formatNum(b)}`)}?`,
+      hint: '💡 חסרו לפי מקומות, שימו לב לפריטה',
+      options, correctIdx,
+      explanation: `${formatNum(a)} − ${formatNum(b)} = ${formatNum(res)}`,
+      visual: null
+    };
+  } else if (v === 2) {
+    const x = randInt(1500, 40000), b = randInt(1500, 40000);
+    const c = x + b;
+    const { options, correctIdx } = numOptions(x, [c, c - b - 100, x + 100]);
+    return {
+      text: `מהו המספר החסר?<br>${expr(`___ + ${formatNum(b)} = ${formatNum(c)}`)}`,
+      hint: '💡 כדי למצוא מחובר חסר: מחסרים מהסכום',
+      options, correctIdx,
+      explanation: `${formatNum(c)} − ${formatNum(b)} = ${formatNum(x)}`,
+      visual: null
+    };
+  } else {
+    const a = randInt(30000, 95000), x = randInt(1500, a - 1000);
+    const c = a - x;
+    const { options, correctIdx } = numOptions(x, [a - c - 100, x + 1000, c]);
+    return {
+      text: `מהו המספר החסר?<br>${expr(`${formatNum(a)} − ___ = ${formatNum(c)}`)}`,
+      hint: '💡 כדי למצוא מחוסר חסר: מחסרים את התוצאה מהמספר הגדול',
+      options, correctIdx,
+      explanation: `${formatNum(a)} − ${formatNum(c)} = ${formatNum(x)}`,
+      visual: null
+    };
+  }
+}
+
+function genDistributive() {
+  const v = randInt(0, 2);
+  const a = randInt(3, 9);
+  const b = randInt(12, 49);
+  const tens = Math.floor(b / 10) * 10;
+  const units = b % 10;
+  if (v === 0) {
+    // fill the blank in the split
+    const { options, correctIdx } = numOptions(units, [tens / 10, b, a]);
+    return {
+      text: `השלימו לפי חוק הפילוג:<br>${expr(`${a} × ${b} = (${a} × ${tens}) + (${a} × ___)`)}`,
+      hint: '💡 מפרקים את המספר לעשרות ולאחדות',
+      options, correctIdx,
+      explanation: `${b} = ${tens} + ${units}, לכן ${a} × ${b} = (${a} × ${tens}) + (${a} × ${units}).`,
+      visual: null
+    };
+  } else if (v === 1) {
+    // which split is correct
+    const correct = `(${a} × ${tens}) + (${a} × ${units})`;
+    const wrongs = [
+      `(${a} × ${tens}) − (${a} × ${units})`,
+      `(${a} + ${tens}) × (${a} + ${units})`,
+      `(${a} × ${tens}) + ${units}`
+    ];
+    const { options, correctIdx } = fixedOptions(expr(correct), wrongs.map(expr));
+    return {
+      text: `איזה פירוק נכון לחישוב ${expr(`${a} × ${b}`)} לפי חוק הפילוג?`,
+      hint: '💡 מפרקים רק את אחד הגורמים לעשרות ואחדות, ושומרים על הכפל',
+      options, correctIdx,
+      explanation: `${b} = ${tens} + ${units}, לכן ${a} × ${b} = (${a} × ${tens}) + (${a} × ${units}).`,
+      visual: null
+    };
+  } else {
+    // compute with help of distribution
+    const res = a * b;
+    const { options, correctIdx } = numOptions(res, [a * tens, a * b + a, a * (b + 1)]);
+    return {
+      text: `חשבו בעזרת חוק הפילוג: ${expr(`${a} × ${b}`)}`,
+      hint: `💡 ${a} × ${tens} ועוד ${a} × ${units}`,
+      options, correctIdx,
+      explanation: `(${a} × ${tens}) + (${a} × ${units}) = ${a * tens} + ${a * units} = ${formatNum(res)}.`,
+      visual: null
+    };
+  }
+}
+
+function genMultiply() {
+  const v = randInt(0, 1);
+  if (v === 0) {
+    const a = randInt(3, 9);
+    const b = randInt(23, 199);
+    const res = a * b;
+    const { options, correctIdx } = numOptions(res, [res + a, res - b, a * (b + 10)]);
+    return {
+      text: `כמה זה ${expr(`${a} × ${b}`)}?`,
+      hint: '💡 אפשר לפרק לפי חוק הפילוג',
+      options, correctIdx,
+      explanation: `${a} × ${b} = ${formatNum(res)}`,
+      visual: null
+    };
+  } else {
+    const a = randInt(12, 49);
+    const b = randInt(12, 49);
+    const res = a * b;
+    const { options, correctIdx } = numOptions(res, [res + a, res - b, res + 100]);
+    return {
+      text: `כמה זה ${expr(`${a} × ${b}`)}?`,
+      hint: '💡 כפל דו-ספרתי: כפלו לפי מקומות וחברו',
+      options, correctIdx,
+      explanation: `${a} × ${b} = ${formatNum(res)}`,
+      visual: null
+    };
+  }
+}
+
+function genDivision() {
+  const v = randInt(0, 2);
+  if (v === 0) {
+    // with remainder
+    const b = randInt(3, 9);
+    const q = randInt(4, 19);
+    const r = randInt(1, b - 1);
+    const a = b * q + r;
+    const correct = `${q} ושארית ${r}`;
+    const wrongs = distinctWrongs(correct, [`${q + 1} ושארית ${r}`, `${q - 1} ושארית ${r}`, `${q} ושארית ${r === 1 ? 2 : 1}`, `${q + 2} ושארית ${r}`]);
+    const { options, correctIdx } = fixedOptions(correct, wrongs);
+    return {
+      text: `כמה זה ${expr(`${a} ÷ ${b}`)}? (כולל שארית)`,
+      hint: '💡 כמה פעמים שלמות נכנס, וכמה נשאר',
+      options, correctIdx,
+      explanation: `${b} × ${q} = ${b * q}, ועוד ${r} = ${a}. לכן ${a} ÷ ${b} = ${q} ושארית ${r}.`,
+      visual: null
+    };
+  } else if (v === 1) {
+    // exact
+    const b = randInt(3, 9);
+    const q = randInt(6, 40);
+    const a = b * q;
+    const { options, correctIdx } = numOptions(q, [q + 1, q - 1, q + 2]);
+    return {
+      text: `כמה זה ${expr(`${a} ÷ ${b}`)}?`,
+      hint: '💡 חיפוש: כמה כפול הוא בדיוק המספר',
+      options, correctIdx,
+      explanation: `${b} × ${q} = ${a}, לכן ${a} ÷ ${b} = ${q}.`,
+      visual: null
+    };
+  } else {
+    // word problem with remainder
+    const b = randInt(3, 8);
+    const q = randInt(4, 15);
+    const r = randInt(1, b - 1);
+    const a = b * q + r;
+    const correct = `${q} ונשארות ${r}`;
+    const wrongs = distinctWrongs(correct, [`${q + 1} ונשארות ${r}`, `${q - 1} ונשארות ${r}`, `${q} ונשארות ${r === 1 ? 2 : 1}`, `${q + 2} ונשארות ${r}`]);
+    const { options, correctIdx } = fixedOptions(correct, wrongs);
+    return {
+      text: `מחלקים ${a} סוכריות שווה בשווה ל-${b} ילדים. כמה כל ילד מקבל וכמה נשאר?`,
+      hint: '💡 חילוק עם שארית',
+      options, correctIdx,
+      explanation: `${a} ÷ ${b} = ${q} ושארית ${r}. כל ילד מקבל ${q} סוכריות ונשארות ${r}.`,
+      visual: null
+    };
+  }
+}
+
+function genOrderOps() {
+  const templates = [
+    () => { const a = randInt(2, 20), b = randInt(2, 9), c = randInt(2, 9); return { s: `${a} + ${b} × ${c}`, res: a + b * c, wrong: (a + b) * c }; },
+    () => { const a = randInt(3, 12), b = randInt(2, 9), c = randInt(1, 9); return { s: `${a} × ${b} − ${c}`, res: a * b - c, wrong: a * (b - c) }; },
+    () => { const c = randInt(2, 6), q = randInt(2, 9), b = c * q, a = randInt(2, 15); return { s: `${a} + ${b} ÷ ${c}`, res: a + q, wrong: (a + b) / c }; },
+    () => { const a = randInt(2, 12), b = randInt(2, 12), c = randInt(2, 9); return { s: `(${a} + ${b}) × ${c}`, res: (a + b) * c, wrong: a + b * c }; },
+    () => { const a = randInt(3, 9), b = randInt(5, 12), c = randInt(1, 4); return { s: `${a} × (${b} − ${c})`, res: a * (b - c), wrong: a * b - c }; },
+  ];
+  const t = pickRandom(templates)();
+  const cands = [t.wrong, t.res + 1, t.res - 1, t.res + 2].filter(x => Number.isInteger(x));
+  const { options, correctIdx } = numOptions(t.res, cands);
+  return {
+    text: `כמה זה ${expr(t.s)}?`,
+    hint: '💡 קודם כפל וחילוק, אחר כך חיבור וחיסור. סוגריים תמיד קודם!',
+    options, correctIdx,
+    explanation: `לפי סדר פעולות החשבון: ${expr(t.s)} = ${t.res}.`,
+    visual: null
+  };
+}
+
+function genWordNum() {
+  const builders = [
+    () => { const base = randInt(800, 2500), n = randInt(2, 5), each = randInt(120, 480); const res = base + n * each;
+      return { text: `בחנות היו ${formatNum(base)} ספרים. הגיעו ${n} משלוחים של ${formatNum(each)} ספרים כל אחד. כמה ספרים יש עכשיו?`, res, wrong: [base + each, n * each, res + each], exp: `${formatNum(base)} + ${n} × ${formatNum(each)} = ${formatNum(base)} + ${formatNum(n * each)} = ${formatNum(res)}` }; },
+    () => { const packs = randInt(4, 9), per = randInt(12, 24), used = randInt(20, packs * per - 5); const res = packs * per - used;
+      return { text: `הזמינו ${packs} חבילות של ${per} עפרונות. חולקו ${used} עפרונות. כמה נשארו?`, res, wrong: [packs * per, used, res + per], exp: `${packs} × ${per} = ${packs * per}, פחות ${used} = ${formatNum(res)}` }; },
+    () => { const price = randInt(800, 2400), down = randInt(200, 700), parts = pickRandom([2, 3, 4, 5]); const rest = price - down; const each = Math.round(rest / parts); const realPrice = down + each * parts;
+      return { text: `מחיר אופניים ${formatNum(realPrice)} ש״ח. שילמו ${formatNum(down)} ש״ח מקדמה, והשאר ב-${parts} תשלומים שווים. כמה כל תשלום?`, res: each, wrong: [realPrice / parts, rest, each + 10], exp: `${formatNum(realPrice)} − ${formatNum(down)} = ${formatNum(each * parts)}, ÷ ${parts} = ${formatNum(each)} ש״ח לכל תשלום` }; },
+    () => { const rows = randInt(8, 24), seats = randInt(12, 30), sold = randInt(50, rows * seats - 20); const res = rows * seats - sold;
+      return { text: `באולם ${rows} שורות עם ${seats} כיסאות בכל שורה. נמכרו ${formatNum(sold)} כרטיסים. כמה כיסאות פנויים?`, res, wrong: [rows * seats, sold, res + seats], exp: `${rows} × ${seats} = ${formatNum(rows * seats)} כיסאות, פחות ${formatNum(sold)} = ${formatNum(res)} פנויים` }; },
+  ];
+  const b = pickRandom(builders)();
+  const { options, correctIdx } = numOptions(b.res, b.wrong);
+  return { text: b.text, hint: '💡 קראו לאט, וחשבו איזו פעולה צריך', options, correctIdx, explanation: b.exp, visual: null };
+}
+
+// ============ GENERATORS: FRACTIONS ============
+
+function genFractionId() {
+  const v = randInt(0, 1);
+  if (v === 0) {
+    const total = randInt(3, 8);
+    const shaded = randInt(1, total - 1);
+    const useCircle = Math.random() < 0.45;
+    const wrongs = distinctWrongs(efrac(shaded, total), [efrac(total - shaded, total), efrac(shaded + 1, total), efrac(Math.max(1, shaded - 1), total), efrac(shaded, total + 1), efrac(shaded, total + 2)]);
+    const { options, correctIdx } = fixedOptions(efrac(shaded, total), wrongs);
+    return {
+      text: `איזה שבר מתאר את החלק הצבוע?`,
+      hint: '💡 המונה = כמה צבוע, המכנה = לכמה חלקים חולק השלם',
+      options, correctIdx,
+      explanation: `השלם חולק ל-${total} חלקים שווים, מתוכם ${shaded} צבועים, לכן ${efrac(shaded, total)}.`,
+      visual: useCircle ? drawFractionCircle(shaded, total) : drawFractionBar(shaded, total)
+    };
+  } else {
+    const n = randInt(2, 7), d = randInt(n + 1, 9);
+    const askNum = Math.random() < 0.5;
+    const ans = askNum ? n : d;
+    const other = askNum ? d : n;
+    const { options, correctIdx } = fixedOptions(String(ans), distinctWrongs(String(ans), [String(other), String(ans + 1), String(ans + 2), String(Math.max(1, ans - 1))]));
+    return {
+      text: `בשבר ${efrac(n, d)} – מהו ה${askNum ? 'מונה' : 'מכנה'}?`,
+      hint: '💡 המונה למעלה, המכנה למטה',
+      options, correctIdx,
+      explanation: `ב${efrac(n, d)}: המונה הוא ${n} (למעלה) והמכנה הוא ${d} (למטה).`,
+      visual: null
+    };
+  }
+}
+
+function genFractionCompare() {
+  const v = randInt(0, 3);
+  if (v === 0) {
+    // same denominator
+    const d = randInt(4, 10);
+    let a = randInt(1, d - 1), b = randInt(1, d - 1);
+    while (a === b) b = randInt(1, d - 1);
+    const bigger = a > b ? efrac(a, d) : efrac(b, d);
+    const { options, correctIdx } = fixedOptions(bigger, [a > b ? efrac(b, d) : efrac(a, d), 'שווים']);
+    return {
+      text: `איזה שבר גדול יותר?<br>${efrac(a, d)} או ${efrac(b, d)}`,
+      hint: '💡 כשהמכנים שווים – גדול יותר מי שיש לו מונה גדול יותר',
+      options, correctIdx,
+      explanation: `המכנים שווים (${d}), לכן גדול יותר השבר עם המונה הגדול: ${bigger}.`,
+      visual: null
+    };
+  } else if (v === 1) {
+    // same numerator
+    const n = randInt(1, 5);
+    let d1 = randInt(n + 1, 10), d2 = randInt(n + 1, 10);
+    while (d1 === d2) d2 = randInt(n + 1, 10);
+    const bigger = d1 < d2 ? efrac(n, d1) : efrac(n, d2);
+    const { options, correctIdx } = fixedOptions(bigger, [d1 < d2 ? efrac(n, d2) : efrac(n, d1), 'שווים']);
+    return {
+      text: `איזה שבר גדול יותר?<br>${efrac(n, d1)} או ${efrac(n, d2)}`,
+      hint: '💡 כשהמונים שווים – גדול יותר מי שהמכנה שלו קטן (פחות חלקים = כל חלק גדול)',
+      options, correctIdx,
+      explanation: `המונים שווים (${n}). מכנה קטן יותר = חלקים גדולים יותר, לכן ${bigger} גדול יותר.`,
+      visual: null
+    };
+  } else if (v === 2) {
+    // compare to half
+    const d = pickRandom([4, 6, 8, 10]);
+    let n = randInt(1, d - 1);
+    while (n === d / 2) n = randInt(1, d - 1);
+    const rel = n > d / 2 ? 'גדול מחצי' : 'קטן מחצי';
+    const { options, correctIdx } = fixedOptions(rel, ['גדול מחצי' === rel ? 'קטן מחצי' : 'גדול מחצי', 'שווה לחצי']);
+    return {
+      text: `השבר ${efrac(n, d)} – גדול או קטן מחצי?`,
+      hint: `💡 חצי מ-${d} זה ${d / 2}. השוו את המונה ל-${d / 2}`,
+      options, correctIdx,
+      explanation: `חצי = ${efrac(d / 2, d)}. כיוון ש-${n} ${n > d / 2 ? 'גדול' : 'קטן'} מ-${d / 2}, השבר ${rel}.`,
+      visual: null
+    };
+  } else {
+    // compare to whole (1)
+    const d = randInt(3, 8);
+    const n = randInt(1, d + 3);
+    const rel = n < d ? 'קטן משלם' : (n === d ? 'שווה לשלם' : 'גדול משלם');
+    const wrongs = ['קטן משלם', 'שווה לשלם', 'גדול משלם'].filter(x => x !== rel);
+    const { options, correctIdx } = fixedOptions(rel, wrongs);
+    return {
+      text: `השבר ${efrac(n, d)} – גדול, קטן או שווה לשלם (1)?`,
+      hint: '💡 שבר שווה לשלם כשהמונה שווה למכנה',
+      options, correctIdx,
+      explanation: `שלם = ${efrac(d, d)}. כיוון שהמונה ${n} ${n < d ? 'קטן מ' : (n === d ? 'שווה ל' : 'גדול מ')}-${d}, השבר ${rel}.`,
+      visual: null
+    };
+  }
+}
+
+function genFractionLine() {
+  const total = randInt(3, 8);
+  const mark = randInt(1, total - 1);
+  const wrongs = [efrac(mark + 1, total), efrac(Math.max(1, mark - 1), total), efrac(mark, total + 1)]
+    .filter((x, i, arr) => arr.indexOf(x) === i && x !== efrac(mark, total)).slice(0, 3);
+  while (wrongs.length < 3) wrongs.push(efrac(randInt(1, total - 1), total + wrongs.length));
+  const { options, correctIdx } = fixedOptions(efrac(mark, total), wrongs.slice(0, 3));
+  return {
+    text: `לאיזה שבר מצביע החץ על ישר המספרים?`,
+    hint: '💡 הקטע בין 0 ל-1 חולק לחלקים שווים – ספרו כמה חלקים עד החץ',
+    options, correctIdx,
+    explanation: `הקטע חולק ל-${total} חלקים, והחץ נמצא אחרי ${mark} חלקים, לכן ${efrac(mark, total)}.`,
+    visual: drawFractionLine(total, mark)
+  };
+}
+
+function genFractionQuantity() {
+  const d = randInt(2, 6);
+  const n = randInt(1, d - 1);
+  const part = randInt(2, 9);
+  const total = d * part;
+  const res = part * n;
+  const { options, correctIdx } = numOptions(res, [part, total, part * (n + 1)]);
+  return {
+    text: `כמה זה ${efrac(n, d)} מתוך ${total}?`,
+    hint: `💡 קודם מחלקים ב-${d} (כמה זה חלק אחד), אחר כך כופלים ב-${n}`,
+    options, correctIdx,
+    explanation: `${total} ÷ ${d} = ${part} (חלק אחד). ${part} × ${n} = ${res}.`,
+    visual: drawFractionBar(n, d)
+  };
+}
+
+function genMixedImproper() {
+  const v = randInt(0, 1);
+  if (v === 0) {
+    // mixed -> improper
+    const w = randInt(1, 4), d = randInt(2, 6), n = randInt(1, d - 1);
+    const imp = w * d + n;
+    const wrongs = distinctWrongs(efrac(imp, d), [efrac(w + n, d), efrac(w * d, d), efrac(imp + 1, d), efrac(imp + 2, d), efrac(Math.max(1, imp - 1), d)]);
+    const { options, correctIdx } = fixedOptions(efrac(imp, d), wrongs);
+    return {
+      text: `המירו למספר מעורב לשבר:<br>${mixed(w, n, d)}`,
+      hint: `💡 כופלים את השלם במכנה ומוסיפים את המונה: ${w} × ${d} + ${n}`,
+      options, correctIdx,
+      explanation: `${w} × ${d} + ${n} = ${imp}, לכן ${mixed(w, n, d)} = ${efrac(imp, d)}.`,
+      visual: null
+    };
+  } else {
+    // improper -> mixed
+    const d = randInt(2, 6), w = randInt(1, 4), n = randInt(1, d - 1);
+    const imp = w * d + n;
+    const wrongs = distinctWrongs(mixed(w, n, d), [mixed(w + 1, n, d), d > 2 ? mixed(w, (n % (d - 1)) + 1, d) : null, w > 1 ? mixed(w - 1, n, d) : null, mixed(w + 2, n, d), mixed(w + 3, n, d)]);
+    const { options, correctIdx } = fixedOptions(mixed(w, n, d), wrongs);
+    return {
+      text: `המירו את השבר למספר מעורב:<br>${efrac(imp, d)}`,
+      hint: `💡 כמה פעמים ${d} נכנס ב-${imp}? זה השלם, והשארית היא המונה`,
+      options, correctIdx,
+      explanation: `${imp} ÷ ${d} = ${w} ושארית ${n}, לכן ${efrac(imp, d)} = ${mixed(w, n, d)}.`,
+      visual: null
+    };
+  }
+}
+
+function genAddSubFrac() {
+  const v = randInt(0, 2);
+  if (v === 0) {
+    // same denom addition
+    const d = randInt(4, 10);
+    const a = randInt(1, d - 2), b = randInt(1, d - a);
+    const sum = a + b;
+    const correct = sum === d ? '<span class="expr">1 (שלם)</span>' : efrac(sum, d);
+    const wrongs = [efrac(sum, d + d), efrac(a + b + 1, d), efrac(a, d)].filter(x => x !== correct).slice(0, 3);
+    while (wrongs.length < 3) wrongs.push(efrac(sum, d + wrongs.length + 1));
+    const { options, correctIdx } = fixedOptions(correct, wrongs.slice(0, 3));
+    return {
+      text: `כמה זה ${expr(`${frac(a, d)} + ${frac(b, d)}`)}?`,
+      hint: '💡 מכנים שווים – מחברים רק את המונים, המכנה נשאר',
+      options, correctIdx,
+      explanation: `${a} + ${b} = ${sum}, המכנה נשאר ${d}: ${efrac(sum, d)}${sum === d ? ' = שלם' : ''}.`,
+      visual: null
+    };
+  } else if (v === 1) {
+    // same denom subtraction
+    const d = randInt(4, 10);
+    let a = randInt(2, d - 1), b = randInt(1, a - 1);
+    const dif = a - b;
+    const wrongs = [efrac(dif, d + d), efrac(a + b, d), efrac(dif + 1, d)];
+    const { options, correctIdx } = fixedOptions(efrac(dif, d), wrongs);
+    return {
+      text: `כמה זה ${expr(`${frac(a, d)} − ${frac(b, d)}`)}?`,
+      hint: '💡 מכנים שווים – מחסרים רק את המונים',
+      options, correctIdx,
+      explanation: `${a} − ${b} = ${dif}, המכנה נשאר ${d}: ${efrac(dif, d)}.`,
+      visual: null
+    };
+  } else {
+    // close denominators (one is a multiple of the other)
+    const small = pickRandom([2, 3, 4]);
+    const k = pickRandom([2, 3]);
+    const big = small * k;
+    const a = 1; // a/small
+    const b = randInt(1, big - 1); // b/big
+    const aConv = a * k;
+    const sum = aConv + b;
+    if (sum >= big) return genAddSubFrac(); // keep it proper, retry
+    const wrongs = [efrac(a + b, big), efrac(sum, big + small), efrac(sum + 1, big)];
+    const { options, correctIdx } = fixedOptions(efrac(sum, big), wrongs);
+    return {
+      text: `כמה זה ${expr(`${frac(a, small)} + ${frac(b, big)}`)}?`,
+      hint: `💡 ממירים למכנה משותף: ${frac(a, small)} = ${frac(aConv, big)}`,
+      options, correctIdx,
+      explanation: `${frac(a, small)} = ${frac(aConv, big)}. עכשיו ${aConv} + ${b} = ${sum}: ${efrac(sum, big)}.`,
+      visual: null
+    };
+  }
+}
+
+function genMultiplyFrac() {
+  const k = randInt(2, 6);
+  const d = randInt(2, 7);
+  const n = randInt(1, d - 1);
+  const num = k * n;
+  const wrongs = [efrac(n, d), efrac(num, d * k), efrac(num + 1, d)];
+  const { options, correctIdx } = fixedOptions(efrac(num, d), wrongs);
+  const whole = Math.floor(num / d), rem = num % d;
+  const mixedNote = num > d ? ` (כלומר ${rem === 0 ? whole : mixed(whole, rem, d)})` : '';
+  return {
+    text: `כמה זה ${expr(`${k} × ${frac(n, d)}`)}?`,
+    hint: '💡 כופלים את המספר השלם במונה, המכנה נשאר',
+    options, correctIdx,
+    explanation: `${k} × ${n} = ${num}, המכנה נשאר ${d}: ${efrac(num, d)}${mixedNote}.`,
+    visual: null
+  };
+}
+
+function genWordFrac() {
+  const builders = [
+    () => { const total = pickRandom([8, 10, 12]); const eaten = randInt(2, total - 1);
+      return { text: `עוגה חולקה ל-${total} חלקים שווים. דנה אכלה ${eaten} חלקים. איזה חלק מהעוגה היא אכלה?`, correct: efrac(eaten, total), wrong: [efrac(total - eaten, total), efrac(eaten + 1, total), efrac(eaten, total + 2), efrac(eaten, total + 1)], exp: `מתוך ${total} חלקים אכלה ${eaten}, לכן ${efrac(eaten, total)}.` }; },
+    () => { const d = pickRandom([3, 4, 5, 6]); const part = randInt(3, 6); const total = d * part; const n = randInt(1, d - 1); const res = part * n;
+      return { text: `בכיתה ${total} תלמידים. ${efrac(n, d)} מהם הגיעו לטיול. כמה תלמידים הגיעו?`, correct: String(res), wrong: [String(total), String(part * (n + 1)), String(res + 1), String(part)], exp: `${total} ÷ ${d} = ${part}, ו-${part} × ${n} = ${res} תלמידים.`, numeric: true }; },
+    () => { const total = pickRandom([12, 16, 20, 24]); const half = total / 2;
+      return { text: `בקופסה ${total} שוקולדים. יואב אכל חצי. כמה שוקולדים אכל?`, correct: String(half), wrong: [String(total), String(total / 4), String(half + 2)], exp: `חצי מ-${total} = ${total} ÷ 2 = ${half}.`, numeric: true }; },
+  ];
+  const b = pickRandom(builders)();
+  const opts = fixedOptions(b.correct, distinctWrongs(b.correct, b.wrong));
+  return { text: b.text, hint: '💡 חשבו מהו השלם ומהו החלק', options: opts.options, correctIdx: opts.correctIdx, explanation: b.exp, visual: null };
+}
+
+// ============ GENERATORS: GEOMETRY ============
+
+function genParallelPerp() {
+  const v = randInt(0, 1);
+  if (v === 0) {
+    const types = [
+      { key: 'parallel', name: 'מקבילים', exp: 'הקווים לא נפגשים אף פעם והמרחק ביניהם קבוע – לכן הם מקבילים.' },
+      { key: 'perpendicular', name: 'מאונכים', exp: 'הקווים נפגשים ויוצרים זווית ישרה (90°) – לכן הם מאונכים (ניצבים).' },
+      { key: 'intersecting', name: 'נחתכים (לא מאונכים)', exp: 'הקווים נפגשים בנקודה אבל הזווית ביניהם אינה 90°.' },
+    ];
+    const t = pickRandom(types);
+    const wrongs = types.filter(x => x.key !== t.key).map(x => x.name);
+    const { options, correctIdx } = fixedOptions(t.name, wrongs);
+    return {
+      text: `מהו היחס בין שני הישרים בציור?`,
+      hint: '💡 מקבילים = לא נפגשים. מאונכים = זווית של 90°',
+      options, correctIdx,
+      explanation: t.exp,
+      visual: drawParallelPerp(t.key)
+    };
+  } else {
+    const facts = [
+      { q: 'קווים מאונכים יוצרים זווית של 90°', a: true, exp: 'נכון! זאת בדיוק ההגדרה של קווים מאונכים (ניצבים).' },
+      { q: 'קווים מקבילים נפגשים בנקודה אחת', a: false, exp: 'לא נכון! קווים מקבילים לעולם לא נפגשים.' },
+      { q: 'במלבן הצלעות הנגדיות מקבילות זו לזו', a: true, exp: 'נכון! במלבן (ובמקבילית) שני זוגות הצלעות הנגדיות מקבילים.' },
+      { q: 'במלבן הצלעות הסמוכות מאונכות זו לזו', a: true, exp: 'נכון! כל הזוויות במלבן ישרות, לכן הצלעות הסמוכות מאונכות.' },
+      { q: 'שני קווים מקבילים נמצאים תמיד באותו מרחק זה מזה', a: true, exp: 'נכון! המרחק בין קווים מקבילים קבוע לכל אורכם.' },
+      { q: 'קווים מאונכים הם גם קווים מקבילים', a: false, exp: 'לא נכון! מאונכים נפגשים בזווית ישרה, מקבילים לא נפגשים בכלל.' },
+    ];
+    const f = pickRandom(facts);
+    const { options, correctIdx } = fixedOptions(f.a ? 'נכון ✓' : 'לא נכון ✗', [f.a ? 'לא נכון ✗' : 'נכון ✓', 'אי אפשר לדעת']);
+    return {
+      text: `נכון או לא נכון?<br>"${f.q}"`,
+      hint: '💡 חשבו על ההגדרות: מקבילים מול מאונכים',
+      options, correctIdx,
+      explanation: f.exp,
+      visual: null
+    };
+  }
+}
 
 // --- DIAGONALS ---
 function genDiagonals() {
@@ -856,7 +1701,6 @@ function genDiagonals() {
   const type = randInt(0, 3);
 
   if (type <= 1) {
-    // How many diagonals in shape?
     const s = shapes[randInt(0, 3)];
     const { options, correctIdx } = makeOptions(
       String(s.diags),
@@ -870,13 +1714,12 @@ function genDiagonals() {
       visual: drawPolygonWithDiags(s.n, s.name)
     };
   } else if (type === 2) {
-    // True/false about diagonal properties
     const facts = [
-      { q: 'במרובע יש בדיוק 2 אלכסונים', a: true, exp: 'מרובע = 4 קודקודים. כל קודקוד מתחבר ל-1 קודקוד לא שכן, וזה נותן 2 אלכסונים' },
+      { q: 'במרובע יש בדיוק 2 אלכסונים', a: true, exp: 'מרובע = 4 קודקודים, וזה נותן 2 אלכסונים' },
       { q: 'במשולש יש אלכסון אחד', a: false, exp: 'במשולש כל שני קודקודים הם שכנים, לכן אין אלכסונים כלל!' },
-      { q: 'במחומש יש 5 אלכסונים', a: true, exp: 'מחומש: 5×(5-3)÷2 = 5×2÷2 = 5 אלכסונים' },
-      { q: 'אלכסון עובר בתוך הצורה', a: true, exp: 'אלכסון הוא קטע שמחבר שני קודקודים לא שכנים ועובר בתוך המצולע' },
-      { q: 'במשושה יש 8 אלכסונים', a: false, exp: 'במשושה יש 9 אלכסונים: 6×(6-3)÷2 = 6×3÷2 = 9' },
+      { q: 'במחומש יש 5 אלכסונים', a: true, exp: 'מחומש: 5×(5-3)÷2 = 5 אלכסונים' },
+      { q: 'אלכסון עובר בתוך הצורה', a: true, exp: 'אלכסון מחבר שני קודקודים לא שכנים ועובר בתוך המצולע' },
+      { q: 'במשושה יש 8 אלכסונים', a: false, exp: 'במשושה יש 9 אלכסונים: 6×(6-3)÷2 = 9' },
     ];
     const fact = pickRandom(facts);
     const { options, correctIdx } = makeOptions(
@@ -891,7 +1734,6 @@ function genDiagonals() {
       visual: null
     };
   } else {
-    // Identify which shape from diag count
     const s = shapes[randInt(1, 3)];
     const { options, correctIdx } = makeOptions(
       s.name,
@@ -910,61 +1752,24 @@ function genDiagonals() {
 // --- QUADRILATERAL PROPERTIES ---
 function genQuadProps() {
   const quads = {
-    square: {
-      name: 'ריבוע', props: [
-        'כל הצלעות שוות',
-        'כל הזוויות ישרות (90°)',
-        'האלכסונים שווים ומאונכים',
-        'האלכסונים חוצים זה את זה',
-        'יש 2 זוגות צלעות מקבילות'
-      ]
-    },
-    rectangle: {
-      name: 'מלבן', props: [
-        'צלעות נגדיות שוות',
-        'כל הזוויות ישרות (90°)',
-        'האלכסונים שווים',
-        'האלכסונים חוצים זה את זה',
-        'יש 2 זוגות צלעות מקבילות'
-      ]
-    },
-    rhombus: {
-      name: 'מעוין', props: [
-        'כל הצלעות שוות',
-        'זוויות נגדיות שוות',
-        'האלכסונים מאונכים',
-        'האלכסונים חוצים זה את זה',
-        'יש 2 זוגות צלעות מקבילות'
-      ]
-    },
-    parallelogram: {
-      name: 'מקבילית', props: [
-        'צלעות נגדיות שוות ומקבילות',
-        'זוויות נגדיות שוות',
-        'האלכסונים חוצים זה את זה',
-        'סכום כל שתי זוויות שכנות = 180°',
-        'יש 2 זוגות צלעות מקבילות'
-      ]
-    },
-    trapezoid: {
-      name: 'טרפז', props: [
-        'יש בדיוק זוג אחד של צלעות מקבילות',
-        'הצלעות המקבילות נקראות בסיסים',
-        'סכום זוויות ליד שוק = 180°',
-      ]
-    }
+    square: { name: 'ריבוע', props: ['כל הצלעות שוות', 'כל הזוויות ישרות (90°)', 'האלכסונים שווים ומאונכים', 'האלכסונים חוצים זה את זה', 'יש 2 זוגות צלעות מקבילות'] },
+    rectangle: { name: 'מלבן', props: ['צלעות נגדיות שוות', 'כל הזוויות ישרות (90°)', 'האלכסונים שווים', 'האלכסונים חוצים זה את זה', 'יש 2 זוגות צלעות מקבילות'] },
+    rhombus: { name: 'מעוין', props: ['כל הצלעות שוות', 'זוויות נגדיות שוות', 'האלכסונים מאונכים', 'האלכסונים חוצים זה את זה', 'יש 2 זוגות צלעות מקבילות'] },
+    parallelogram: { name: 'מקבילית', props: ['צלעות נגדיות שוות ומקבילות', 'זוויות נגדיות שוות', 'האלכסונים חוצים זה את זה', 'סכום כל שתי זוויות שכנות = 180°', 'יש 2 זוגות צלעות מקבילות'] },
+    trapezoid: { name: 'טרפז', props: ['יש בדיוק זוג אחד של צלעות מקבילות', 'הצלעות המקבילות נקראות בסיסים', 'סכום זוויות ליד שוק = 180°'] },
+    kite: { name: 'דלתון', props: ['שני זוגות צלעות סמוכות שוות', 'אלכסון אחד חוצה את השני', 'האלכסונים מאונכים', 'זוג זוויות נגדיות שוות'] }
   };
 
   const type = randInt(0, 3);
 
   if (type === 0) {
-    // Which shape has this property?
     const uniqueProps = [
       { prop: 'כל הצלעות שוות וכל הזוויות ישרות', answer: 'ריבוע', wrong: ['מלבן', 'מעוין', 'מקבילית'] },
       { prop: 'צלעות נגדיות שוות וכל הזוויות ישרות, אבל לא כל הצלעות שוות', answer: 'מלבן', wrong: ['ריבוע', 'מעוין', 'טרפז'] },
       { prop: 'כל הצלעות שוות אבל הזוויות לא בהכרח ישרות', answer: 'מעוין', wrong: ['ריבוע', 'מלבן', 'מקבילית'] },
       { prop: 'יש בדיוק זוג אחד של צלעות מקבילות', answer: 'טרפז', wrong: ['מקבילית', 'מלבן', 'ריבוע'] },
-      { prop: 'צלעות נגדיות מקבילות ושוות, אבל הזוויות לא בהכרח ישרות ולא כל הצלעות שוות', answer: 'מקבילית', wrong: ['מלבן', 'ריבוע', 'טרפז'] },
+      { prop: 'צלעות נגדיות מקבילות ושוות, אבל הזוויות לא ישרות', answer: 'מקבילית', wrong: ['מלבן', 'ריבוע', 'טרפז'] },
+      { prop: 'שני זוגות צלעות סמוכות שוות והאלכסונים מאונכים', answer: 'דלתון', wrong: ['מעוין', 'טרפז', 'מלבן'] },
     ];
     const item = pickRandom(uniqueProps);
     const { options, correctIdx } = makeOptions(item.answer, item.wrong);
@@ -976,18 +1781,11 @@ function genQuadProps() {
       visual: null
     };
   } else if (type === 1) {
-    // True/false about a specific quad
     const keys = Object.keys(quads);
     const key = pickRandom(keys);
     const quad = quads[key];
     const trueProp = pickRandom(quad.props);
-    // Create a false prop
-    const falseProps = [
-      `ב${quad.name} כל הזוויות חדות`,
-      `ב${quad.name} האלכסונים שווים תמיד`,
-      `ב${quad.name} יש 3 אלכסונים`,
-      `ב${quad.name} כל הצלעות מקבילות זו לזו`,
-    ];
+    const falseProps = [`ב${quad.name} כל הזוויות חדות`, `ב${quad.name} יש 3 אלכסונים`, `ב${quad.name} כל הצלעות מקבילות זו לזו`];
     const isTrue = Math.random() < 0.5;
     const statement = isTrue ? `ב${quad.name}: ${trueProp}` : pickRandom(falseProps);
     const { options, correctIdx } = makeOptions(
@@ -1002,15 +1800,11 @@ function genQuadProps() {
       visual: drawQuadrilateral(key)
     };
   } else if (type === 2) {
-    // Identify shape from image
-    const keys = ['square', 'rectangle', 'rhombus', 'parallelogram', 'trapezoid'];
+    const keys = ['square', 'rectangle', 'rhombus', 'parallelogram', 'trapezoid', 'kite'];
     const key = pickRandom(keys);
     const quad = quads[key];
     const wrongNames = keys.filter(k => k !== key).map(k => quads[k].name);
-    const { options, correctIdx } = makeOptions(
-      quad.name,
-      shuffle(wrongNames).slice(0, 3)
-    );
+    const { options, correctIdx } = makeOptions(quad.name, shuffle(wrongNames).slice(0, 3));
     return {
       text: `מהו שם הצורה?`,
       hint: '💡 שימו לב לצלעות ולזוויות',
@@ -1019,25 +1813,13 @@ function genQuadProps() {
       visual: drawQuadrilateral(key)
     };
   } else {
-    // Which property does NOT belong?
     const keys = Object.keys(quads);
     const key = pickRandom(keys);
     const quad = quads[key];
-    const wrongStatements = [
-      'כל הצלעות שוות',
-      'כל הזוויות ישרות',
-      'האלכסונים מאונכים',
-      'יש בדיוק זוג מקבילי אחד',
-      'האלכסונים שווים',
-      'זוויות נגדיות שוות',
-    ];
-    // Find a statement NOT in the quad's props
+    const wrongStatements = ['כל הצלעות שוות', 'כל הזוויות ישרות', 'האלכסונים מאונכים', 'יש בדיוק זוג מקבילי אחד', 'האלכסונים שווים', 'זוויות נגדיות שוות'];
     const notProp = wrongStatements.find(s => !quad.props.some(p => p.includes(s.slice(0, 10))));
-    if (!notProp) return genQuadProps(); // retry
-    const { options, correctIdx } = makeOptions(
-      notProp,
-      shuffle(quad.props).slice(0, 3)
-    );
+    if (!notProp) return genQuadProps();
+    const { options, correctIdx } = makeOptions(notProp, shuffle(quad.props).slice(0, 3));
     return {
       text: `איזו תכונה לא מתאימה ל${quad.name}?`,
       hint: '💡 חשבו על כל תכונות הצורה',
@@ -1048,336 +1830,55 @@ function genQuadProps() {
   }
 }
 
-// --- TRIANGLES ---
-function genTriangles() {
-  const type = randInt(0, 4);
-
-  if (type === 0) {
-    // Classify by sides
-    const tris = [
-      { name: 'שווה צלעות', sides: [5, 5, 5], type: 'equilateral', exp: 'כל 3 הצלעות שוות, לכן זה משולש שווה צלעות' },
-      { name: 'שווה שוקיים', sides: [5, 5, 3], type: 'isosceles', exp: 'שתי צלעות שוות (השוקיים), לכן זה משולש שווה שוקיים' },
-      { name: 'שונה צלעות', sides: [3, 4, 6], type: 'scalene', exp: 'כל הצלעות שונות, לכן זה משולש שונה צלעות' },
-    ];
-    const tri = pickRandom(tris);
-    const { options, correctIdx } = makeOptions(
-      tri.name,
-      tris.filter(t => t.name !== tri.name).map(t => t.name).concat(['ישר זווית'])
-    );
-    return {
-      text: `מה סוג המשולש? (לפי צלעות)`,
-      hint: '💡 בדקו אם יש צלעות שוות',
-      options, correctIdx,
-      explanation: tri.exp,
-      visual: drawTriangle(tri.type, { sides: tri.sides })
-    };
-  } else if (type === 1) {
-    // Classify by angles
-    const tris = [
-      { name: 'חד זווית', desc: 'כל הזוויות קטנות מ-90°', type: 'acute', angles: [70, 60, 50] },
-      { name: 'ישר זווית', desc: 'יש זווית אחת של 90°', type: 'right', angles: [90, 45, 45] },
-      { name: 'קהה זווית', desc: 'יש זווית אחת גדולה מ-90°', type: 'obtuse', angles: [120, 35, 25] },
-    ];
-    const tri = pickRandom(tris);
-    const { options, correctIdx } = makeOptions(
-      tri.name,
-      tris.filter(t => t.name !== tri.name).map(t => t.name).concat(['שווה צלעות'])
-    );
-    return {
-      text: `המשולש הזה הוא... (לפי זוויות)`,
-      hint: `💡 הזוויות: ${tri.angles.join('°, ')}°`,
-      options, correctIdx,
-      explanation: `${tri.desc}. הזוויות: ${tri.angles.join('° + ')}° = 180°`,
-      visual: drawTriangle(tri.type)
-    };
-  } else if (type === 2) {
-    // Sum of angles
-    const a1 = randInt(30, 80);
-    const a2 = randInt(30, 150 - a1 - 10);
-    const a3 = 180 - a1 - a2;
-    const { options, correctIdx } = makeOptions(
-      `${a3}°`,
-      [`${a3 + 10}°`, `${Math.max(10, a3 - 10)}°`, `${180 - a1}°`]
-    );
-    return {
-      text: `במשולש שתי זוויות הן ${a1}° ו-${a2}°. מהי הזווית השלישית?`,
-      hint: '💡 סכום הזוויות במשולש תמיד = 180°',
-      options, correctIdx,
-      explanation: `180° - ${a1}° - ${a2}° = ${a3}°`,
-      visual: null
-    };
-  } else if (type === 3) {
-    // True/false about triangles
-    const facts = [
-      { q: 'סכום הזוויות במשולש הוא 180°', a: true, exp: 'נכון! זה כלל בסיסי בגיאומטריה' },
-      { q: 'במשולש שווה צלעות כל זווית שווה ל-60°', a: true, exp: 'נכון! 180° ÷ 3 = 60°' },
-      { q: 'במשולש יכולות להיות שתי זוויות ישרות', a: false, exp: 'לא! שתי זוויות ישרות = 180°, ולא נשאר מקום לזווית שלישית' },
-      { q: 'משולש שווה שוקיים הוא תמיד גם חד זווית', a: false, exp: 'לא! משולש שווה שוקיים יכול להיות גם קהה זווית או ישר זווית' },
-      { q: 'משולש ישר זווית יכול להיות גם שווה שוקיים', a: true, exp: 'נכון! למשל משולש עם זוויות 90°, 45°, 45°' },
-      { q: 'במשולש שווה צלעות כל הצלעות שוות', a: true, exp: 'נכון! זו ההגדרה של משולש שווה צלעות' },
-    ];
-    const fact = pickRandom(facts);
-    const { options, correctIdx } = makeOptions(
-      fact.a ? 'נכון ✓' : 'לא נכון ✗',
-      [fact.a ? 'לא נכון ✗' : 'נכון ✓', 'לא ניתן לדעת', 'רק לפעמים']
-    );
-    return {
-      text: `נכון או לא? "${fact.q}"`,
-      hint: '💡 חשבו בזהירות!',
-      options, correctIdx,
-      explanation: fact.exp,
-      visual: null
-    };
-  } else {
-    // What CAN'T be a triangle?
-    const a1 = randInt(20, 60);
-    const a2 = randInt(20, 60);
-    const a3Good = 180 - a1 - a2;
-    const a3Bad = 180 - a1 - a2 + randInt(5, 20);
-    const good = `${a1}°, ${a2}°, ${a3Good}°`;
-    const bad = `${a1}°, ${a2}°, ${a3Bad}°`;
-    const { options, correctIdx } = makeOptions(
-      bad,
-      [good, `60°, 60°, 60°`, `90°, 45°, 45°`]
-    );
-    return {
-      text: `איזו קבוצת זוויות לא יכולה להיות משולש?`,
-      hint: '💡 סכום הזוויות חייב להיות בדיוק 180°',
-      options, correctIdx,
-      explanation: `${bad}: הסכום = ${a1 + a2 + a3Bad}° ≠ 180°, לכן זה לא יכול להיות משולש`,
-      visual: null
-    };
-  }
-}
-
-// --- PERIMETER ---
-function genPerimeter() {
-  const type = randInt(0, 3);
-
-  if (type === 0) {
-    // Triangle perimeter
-    const s1 = randInt(3, 12), s2 = randInt(3, 12), s3 = randInt(Math.abs(s1-s2)+1, s1+s2-1);
-    const P = s1 + s2 + s3;
-    const tType = s1 === s2 && s2 === s3 ? 'equilateral' : (s1 === s2 || s2 === s3 || s1 === s3 ? 'isosceles' : 'scalene');
-    const { options, correctIdx } = makeOptions(
-      `${P} ס״מ`,
-      [`${P + s1} ס״מ`, `${P - s3} ס״מ`, `${s1 * s2} ס״מ`]
-    );
-    return {
-      text: `מהו היקף המשולש?`,
-      hint: `💡 היקף = סכום כל הצלעות`,
-      options, correctIdx,
-      explanation: `היקף = ${s1} + ${s2} + ${s3} = ${P} ס״מ`,
-      visual: drawTriangle(tType, { sides: [s1 + ' ס״מ', s2 + ' ס״מ', s3 + ' ס״מ'] })
-    };
-  } else if (type === 1) {
-    // Generic polygon perimeter (4-6 sides)
-    const n = randInt(4, 6);
-    const names = { 4: 'מרובע', 5: 'מחומש', 6: 'משושה' };
-    const sides = [];
-    for (let i = 0; i < n; i++) sides.push(randInt(2, 10));
-    const P = sides.reduce((a, b) => a + b, 0);
-    const { options, correctIdx } = makeOptions(
-      `${P} ס״מ`,
-      [`${P + sides[0]} ס״מ`, `${P - sides[n-1]} ס״מ`, `${Math.round(P * 1.5)} ס״מ`]
-    );
-    return {
-      text: `מהו היקף ה${names[n]}?`,
-      hint: `💡 חברו את כל ${n} הצלעות`,
-      options, correctIdx,
-      explanation: `היקף = ${sides.join(' + ')} = ${P} ס״מ`,
-      visual: drawGenericPolygon(n, sides.map(s => s + ' ס״מ'), names[n])
-    };
-  } else if (type === 2) {
-    // Square perimeter
-    const s = randInt(3, 15);
-    const P = s * 4;
-    const { options, correctIdx } = makeOptions(
-      `${P} ס״מ`,
-      [`${s * s} ס״מ`, `${s * 2} ס״מ`, `${s * 3} ס״מ`]
-    );
-    return {
-      text: `מהו היקף הריבוע?`,
-      hint: '💡 בריבוע כל הצלעות שוות! היקף = צלע × 4',
-      options, correctIdx,
-      explanation: `היקף ריבוע = 4 × צלע = 4 × ${s} = ${P} ס״מ`,
-      visual: drawSquare(s)
-    };
-  } else {
-    // Rectangle perimeter
-    const w = randInt(3, 15), h = randInt(3, 12);
-    const P = 2 * (w + h);
-    const { options, correctIdx } = makeOptions(
-      `${P} ס״מ`,
-      [`${w * h} ס״מ`, `${w + h} ס״מ`, `${P + w} ס״מ`]
-    );
-    return {
-      text: `מהו היקף המלבן?`,
-      hint: '💡 היקף מלבן = 2 × (אורך + רוחב)',
-      options, correctIdx,
-      explanation: `היקף = 2 × (${w} + ${h}) = 2 × ${w + h} = ${P} ס״מ`,
-      visual: drawRectangle(w, h)
-    };
-  }
-}
-
 // --- AREA & PERIMETER OF RECT/SQUARE ---
 function genRectArea() {
   const type = randInt(0, 5);
 
   if (type === 0) {
-    // Square area
     const s = randInt(2, 12);
     const A = s * s;
-    const { options, correctIdx } = makeOptions(
-      `${A} סמ״ר`,
-      [`${s * 4} סמ״ר`, `${s * 2} סמ״ר`, `${A + s} סמ״ר`]
-    );
-    return {
-      text: `מהו שטח הריבוע?`,
-      hint: '💡 שטח ריבוע = צלע × צלע',
-      options, correctIdx,
-      explanation: `שטח = ${s} × ${s} = ${A} סמ״ר`,
-      visual: drawSquare(s)
-    };
+    const { options, correctIdx } = makeOptions(`${A} סמ״ר`, [`${s * 4} סמ״ר`, `${s * 2} סמ״ר`, `${A + s} סמ״ר`]);
+    return { text: `מהו שטח הריבוע?`, hint: '💡 שטח ריבוע = צלע × צלע', options, correctIdx, explanation: `שטח = ${s} × ${s} = ${A} סמ״ר`, visual: drawSquare(s) };
   } else if (type === 1) {
-    // Rectangle area
     const w = randInt(2, 12), h = randInt(2, 10);
     const A = w * h;
-    const { options, correctIdx } = makeOptions(
-      `${A} סמ״ר`,
-      [`${2 * (w + h)} סמ״ר`, `${w + h} סמ״ר`, `${A + w} סמ״ר`]
-    );
-    return {
-      text: `מהו שטח המלבן?`,
-      hint: '💡 שטח מלבן = אורך × רוחב',
-      options, correctIdx,
-      explanation: `שטח = ${w} × ${h} = ${A} סמ״ר`,
-      visual: drawRectangle(w, h)
-    };
+    const { options, correctIdx } = makeOptions(`${A} סמ״ר`, [`${2 * (w + h)} סמ״ר`, `${w + h} סמ״ר`, `${A + w} סמ״ר`]);
+    return { text: `מהו שטח המלבן?`, hint: '💡 שטח מלבן = אורך × רוחב', options, correctIdx, explanation: `שטח = ${w} × ${h} = ${A} סמ״ר`, visual: drawRectangle(w, h) };
   } else if (type === 2) {
-    // Find missing side from area
     const w = randInt(3, 12), h = randInt(2, 10);
     const A = w * h;
-    const { options, correctIdx } = makeOptions(
-      `${h} ס״מ`,
-      [`${w} ס״מ`, `${A} ס״מ`, `${h + 2} ס״מ`]
-    );
-    return {
-      text: `שטח מלבן הוא ${A} סמ״ר. אורכו ${w} ס״מ. מהו רוחבו?`,
-      hint: `💡 שטח = אורך × רוחב, לכן רוחב = שטח ÷ אורך`,
-      options, correctIdx,
-      explanation: `רוחב = ${A} ÷ ${w} = ${h} ס״מ`,
-      visual: null
-    };
+    const { options, correctIdx } = makeOptions(`${h} ס״מ`, [`${w} ס״מ`, `${A} ס״מ`, `${h + 2} ס״מ`]);
+    return { text: `שטח מלבן הוא ${A} סמ״ר. אורכו ${w} ס״מ. מהו רוחבו?`, hint: `💡 רוחב = שטח ÷ אורך`, options, correctIdx, explanation: `רוחב = ${A} ÷ ${w} = ${h} ס״מ`, visual: null };
   } else if (type === 3) {
-    // Square: area vs perimeter distinction
     const s = randInt(3, 10);
-    const A = s * s;
-    const P = s * 4;
+    const A = s * s, P = s * 4;
     const askArea = Math.random() < 0.5;
     if (askArea) {
-      const { options, correctIdx } = makeOptions(
-        `${A} סמ״ר`,
-        [`${P} ס״מ`, `${s * 2} סמ״ר`, `${A + P} סמ״ר`]
-      );
-      return {
-        text: `צלע ריבוע היא ${s} ס״מ. מהו שטחו?`,
-        hint: '💡 שטח ריבוע = צלע × צלע (לא לבלבל עם היקף!)',
-        options, correctIdx,
-        explanation: `שטח = ${s} × ${s} = ${A} סמ״ר (היקף = ${P} ס״מ, זה דבר אחר!)`,
-        visual: drawSquare(s)
-      };
+      const { options, correctIdx } = makeOptions(`${A} סמ״ר`, [`${P} ס״מ`, `${s * 2} סמ״ר`, `${A + P} סמ״ר`]);
+      return { text: `צלע ריבוע היא ${s} ס״מ. מהו שטחו?`, hint: '💡 שטח ריבוע = צלע × צלע (לא לבלבל עם היקף!)', options, correctIdx, explanation: `שטח = ${s} × ${s} = ${A} סמ״ר (היקף = ${P} ס״מ, זה דבר אחר!)`, visual: drawSquare(s) };
     } else {
-      const { options, correctIdx } = makeOptions(
-        `${P} ס״מ`,
-        [`${A} סמ״ר`, `${s * 3} ס״מ`, `${P + s} ס״מ`]
-      );
-      return {
-        text: `צלע ריבוע היא ${s} ס״מ. מהו היקפו?`,
-        hint: '💡 היקף ריבוע = 4 × צלע (לא לבלבל עם שטח!)',
-        options, correctIdx,
-        explanation: `היקף = 4 × ${s} = ${P} ס״מ (שטח = ${A} סמ״ר, זה דבר אחר!)`,
-        visual: drawSquare(s)
-      };
+      const { options, correctIdx } = makeOptions(`${P} ס״מ`, [`${A} סמ״ר`, `${s * 3} ס״מ`, `${P + s} ס״מ`]);
+      return { text: `צלע ריבוע היא ${s} ס״מ. מהו היקפו?`, hint: '💡 היקף ריבוע = 4 × צלע (לא לבלבל עם שטח!)', options, correctIdx, explanation: `היקף = 4 × ${s} = ${P} ס״מ (שטח = ${A} סמ״ר, זה דבר אחר!)`, visual: drawSquare(s) };
     }
   } else if (type === 4) {
-    // Word problem
     const problems = [
-      () => {
-        const s = randInt(3, 8);
-        const A = s * s;
-        return {
-          text: `גינה בצורת ריבוע, צלעה ${s} מטר. כמה אריחים של 1 מ״ר צריך כדי לכסות אותה?`,
-          hint: '💡 שטח = כמה אריחים של מ״ר אחד',
-          answer: `${A}`,
-          wrong: [`${s * 4}`, `${s * 2}`, `${A + s}`],
-          exp: `שטח = ${s} × ${s} = ${A} מ״ר, צריך ${A} אריחים`
-        };
-      },
-      () => {
-        const w = randInt(4, 10), h = randInt(3, 8);
-        const P = 2 * (w + h);
-        return {
-          text: `חדר בצורת מלבן, אורכו ${w} מ׳ ורוחבו ${h} מ׳. כמה מטר שוליים (פנלים) צריך?`,
-          hint: '💡 שוליים = היקף!',
-          answer: `${P} מטר`,
-          wrong: [`${w * h} מטר`, `${w + h} מטר`, `${P + w} מטר`],
-          exp: `היקף = 2 × (${w} + ${h}) = 2 × ${w + h} = ${P} מטר`
-        };
-      },
-      () => {
-        const w = randInt(5, 12), h = randInt(3, 8);
-        const A = w * h;
-        return {
-          text: `מגרש בצורת מלבן, אורכו ${w} מ׳ ורוחבו ${h} מ׳. מהו שטח המגרש?`,
-          hint: '💡 שטח = אורך × רוחב',
-          answer: `${A} מ״ר`,
-          wrong: [`${2*(w+h)} מ״ר`, `${w + h} מ״ר`, `${A + w} מ״ר`],
-          exp: `שטח = ${w} × ${h} = ${A} מ״ר`
-        };
-      },
+      () => { const s = randInt(3, 8), A = s * s; return { text: `גינה בצורת ריבוע, צלעה ${s} מטר. כמה אריחים של 1 מ״ר צריך כדי לכסות אותה?`, hint: '💡 שטח = כמה אריחים של מ״ר אחד', answer: `${A}`, wrong: [`${s * 4}`, `${s * 2}`, `${A + s}`], exp: `שטח = ${s} × ${s} = ${A} מ״ר, צריך ${A} אריחים` }; },
+      () => { const w = randInt(4, 10), h = randInt(3, 8), P = 2 * (w + h); return { text: `חדר בצורת מלבן, אורכו ${w} מ׳ ורוחבו ${h} מ׳. כמה מטר פנלים צריך מסביב?`, hint: '💡 מסביב = היקף!', answer: `${P} מטר`, wrong: [`${w * h} מטר`, `${w + h} מטר`, `${P + w} מטר`], exp: `היקף = 2 × (${w} + ${h}) = ${P} מטר` }; },
+      () => { const w = randInt(5, 12), h = randInt(3, 8), A = w * h; return { text: `מגרש בצורת מלבן, אורכו ${w} מ׳ ורוחבו ${h} מ׳. מהו שטח המגרש?`, hint: '💡 שטח = אורך × רוחב', answer: `${A} מ״ר`, wrong: [`${2 * (w + h)} מ״ר`, `${w + h} מ״ר`, `${A + w} מ״ר`], exp: `שטח = ${w} × ${h} = ${A} מ״ר` }; },
     ];
     const prob = pickRandom(problems)();
     const { options, correctIdx } = makeOptions(prob.answer, prob.wrong);
-    return {
-      text: prob.text,
-      hint: prob.hint,
-      options, correctIdx,
-      explanation: prob.exp,
-      visual: null
-    };
+    return { text: prob.text, hint: prob.hint, options, correctIdx, explanation: prob.exp, visual: null };
   } else {
-    // Find side from perimeter
     const isSquare = Math.random() < 0.5;
     if (isSquare) {
-      const s = randInt(3, 15);
-      const P = s * 4;
-      const { options, correctIdx } = makeOptions(
-        `${s} ס״מ`,
-        [`${P} ס״מ`, `${s * 2} ס״מ`, `${s + 4} ס״מ`]
-      );
-      return {
-        text: `היקף ריבוע הוא ${P} ס״מ. מהי צלעו?`,
-        hint: '💡 צלע = היקף ÷ 4',
-        options, correctIdx,
-        explanation: `צלע = ${P} ÷ 4 = ${s} ס״מ`,
-        visual: null
-      };
+      const s = randInt(3, 15), P = s * 4;
+      const { options, correctIdx } = makeOptions(`${s} ס״מ`, [`${P} ס״מ`, `${s * 2} ס״מ`, `${s + 4} ס״מ`]);
+      return { text: `היקף ריבוע הוא ${P} ס״מ. מהי צלעו?`, hint: '💡 צלע = היקף ÷ 4', options, correctIdx, explanation: `צלע = ${P} ÷ 4 = ${s} ס״מ`, visual: null };
     } else {
-      const w = randInt(4, 12), h = randInt(3, 10);
-      const P = 2 * (w + h);
-      const { options, correctIdx } = makeOptions(
-        `${h} ס״מ`,
-        [`${w} ס״מ`, `${P / 2} ס״מ`, `${h + 2} ס״מ`]
-      );
-      return {
-        text: `היקף מלבן הוא ${P} ס״מ. אורכו ${w} ס״מ. מהו רוחבו?`,
-        hint: `💡 רוחב = (היקף ÷ 2) - אורך`,
-        options, correctIdx,
-        explanation: `חצי היקף = ${P} ÷ 2 = ${P / 2}. רוחב = ${P / 2} - ${w} = ${h} ס״מ`,
-        visual: null
-      };
+      const w = randInt(4, 12), h = randInt(3, 10), P = 2 * (w + h);
+      const { options, correctIdx } = makeOptions(`${h} ס״מ`, [`${w} ס״מ`, `${P / 2} ס״מ`, `${h + 2} ס״מ`]);
+      return { text: `היקף מלבן הוא ${P} ס״מ. אורכו ${w} ס״מ. מהו רוחבו?`, hint: `💡 רוחב = (היקף ÷ 2) − אורך`, options, correctIdx, explanation: `חצי היקף = ${P} ÷ 2 = ${P / 2}. רוחב = ${P / 2} − ${w} = ${h} ס״מ`, visual: null };
     }
   }
 }
@@ -1385,45 +1886,91 @@ function genRectArea() {
 // ============ GAME ENGINE ============
 
 const generators = {
-  diagonals: genDiagonals,
+  // numbers
+  placeValue: genPlaceValue,
+  numberLine: genNumberLine,
+  addSub: genAddSub,
+  distributive: genDistributive,
+  multiply: genMultiply,
+  division: genDivision,
+  orderOps: genOrderOps,
+  wordNum: genWordNum,
+  // fractions
+  fracId: genFractionId,
+  fracCompare: genFractionCompare,
+  fracLine: genFractionLine,
+  fracQuantity: genFractionQuantity,
+  mixedImproper: genMixedImproper,
+  addSubFrac: genAddSubFrac,
+  multiplyFrac: genMultiplyFrac,
+  wordFrac: genWordFrac,
+  // geometry
+  parallelPerp: genParallelPerp,
   quadProps: genQuadProps,
-  triangles: genTriangles,
-  perimeter: genPerimeter,
+  diagonals: genDiagonals,
   rectArea: genRectArea,
 };
 
 const topicNames = {
-  diagonals: 'אלכסונים',
+  placeValue: 'מבנה עשרוני',
+  numberLine: 'ישר המספרים',
+  addSub: 'חיבור וחיסור',
+  distributive: 'חוק הפילוג',
+  multiply: 'כפל',
+  division: 'חילוק',
+  orderOps: 'סדר פעולות',
+  wordNum: 'בעיה מילולית',
+  fracId: 'מהו השבר',
+  fracCompare: 'השוואת שברים',
+  fracLine: 'שברים על הישר',
+  fracQuantity: 'שבר מתוך כמות',
+  mixedImproper: 'מספר מעורב ושבר',
+  addSubFrac: 'חיבור וחיסור שברים',
+  multiplyFrac: 'כפל שלם בשבר',
+  wordFrac: 'בעיה בשברים',
+  parallelPerp: 'מקבילים ומאונכים',
   quadProps: 'תכונות מרובעים',
-  triangles: 'מיון משולשים',
-  perimeter: 'היקף מצולע',
+  diagonals: 'אלכסונים',
   rectArea: 'שטח והיקף',
-  all: 'סימולציית מבחן',
 };
 
-const allTopics = Object.keys(generators);
+const SUBJ = {
+  num: ['placeValue', 'numberLine', 'addSub', 'distributive', 'multiply', 'division', 'orderOps', 'wordNum'],
+  frac: ['fracId', 'fracCompare', 'fracLine', 'fracQuantity', 'mixedImproper', 'addSubFrac', 'multiplyFrac', 'wordFrac'],
+  geo: ['parallelPerp', 'quadProps', 'diagonals', 'rectArea'],
+};
+const MOCK_MAP = { mockNum: 'num', mockFrac: 'frac', mockGeo: 'geo' };
+
+function poolFor(topic) {
+  if (topic === 'all') return [...SUBJ.num, ...SUBJ.frac, ...SUBJ.geo];
+  if (MOCK_MAP[topic]) return SUBJ[MOCK_MAP[topic]];
+  return [topic];
+}
 
 function generateQuestions(topic, count) {
+  const pool = poolFor(topic);
   const qs = [];
   for (let i = 0; i < count; i++) {
-    const t = topic === 'all' ? allTopics[i % allTopics.length] : topic;
+    const t = pool[i % pool.length];
     try {
       const q = generators[t]();
       q.topic = t;
       qs.push(q);
     } catch (e) {
       console.error('Error generating', t, e);
-      const q = genPerimeter();
-      q.topic = 'perimeter';
+      const q = genAddSub();
+      q.topic = 'addSub';
       qs.push(q);
     }
   }
-  return topic === 'all' ? shuffle(qs) : qs;
+  return pool.length > 1 ? shuffle(qs) : qs;
 }
 
 function startTopic(topic) {
   currentTopic = topic;
-  const count = topic === 'all' ? 10 : 8;
+  let count = 8;
+  if (topic === 'all') count = 15;
+  else if (MOCK_MAP[topic]) count = 10;
   questions = generateQuestions(topic, count);
   currentQ = 0;
   correctScore = 0;
@@ -1434,6 +1981,7 @@ function startTopic(topic) {
   document.getElementById('backBtn').classList.add('show');
   document.getElementById('correctCount').textContent = '0';
   document.getElementById('wrongCount').textContent = '0';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
   updateProgress();
   showQuestion();
 }
@@ -1495,7 +2043,7 @@ function showExplanation(ok, text) {
 function nextQuestion() {
   currentQ++;
   if (currentQ >= questions.length) showResults();
-  else { updateProgress(); showQuestion(); }
+  else { updateProgress(); showQuestion(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
 }
 
 function updateProgress() {
@@ -1513,6 +2061,7 @@ function showResults() {
   document.getElementById('statCorrect').textContent = correctScore;
   document.getElementById('statWrong').textContent = wrongScore;
   document.getElementById('statTotal').textContent = questions.length;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
   if (pct >= 90) {
     document.getElementById('resultsEmoji').textContent = '🏆';
     document.getElementById('resultsTitle').textContent = 'מצוין! אלוף!';
@@ -1540,6 +2089,7 @@ function goToTopics() {
   document.getElementById('progressContainer').classList.remove('active');
   document.getElementById('backBtn').classList.remove('show');
   document.getElementById('topicSelection').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // ============ CELEBRATIONS ============
